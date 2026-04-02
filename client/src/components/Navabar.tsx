@@ -7,34 +7,31 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home",           path: "/"                          },
-  { label: "Services",       path: "/medical-services"          },
-  { label: "Expertise",      path: "/areas-of-expertise"        },
-  { label: "Why Dr. Sharma", path: "/why-choose-DrRakeshSharma" },
+  { label: "Home",      path: "/"                          },
+  { label: "Services",  path: "/medical-services"          },
+  { label: "Expertise", path: "/areas-of-expertise"        },
+  { label: "Blogs",     path: "/our-blogs"                 },
+  { label: "About Us",  path: "/why-choose-DrRakeshSharma" },
 ];
 
 export default function Navbar() {
   const location = useLocation();
   const [scrolled,     setScrolled]     = useState(false);
   const [mobileOpen,   setMobileOpen]   = useState(false);
-  // store offset-based positions (relative to nav-links container, not viewport)
   const [activeOffset, setActiveOffset] = useState<{ left: number; width: number } | null>(null);
   const [hoverOffset,  setHoverOffset]  = useState<{ left: number; width: number } | null>(null);
 
   const linksContainerRef = useRef<HTMLElement>(null);
   const linkRefs          = useRef<Record<string, HTMLAnchorElement | null>>({});
 
-  /* ── scroll shadow ── */
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  /* ── close mobile on route change ── */
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  /* ── recalculate active indicator offset ── */
   const recalcActive = () => {
     const container = linksContainerRef.current;
     const el        = linkRefs.current[location.pathname];
@@ -45,7 +42,6 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // small timeout so DOM has settled after route change
     const t = setTimeout(recalcActive, 30);
     return () => clearTimeout(t);
   }, [location.pathname, scrolled]);
@@ -73,21 +69,21 @@ export default function Navbar() {
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
         :root {
-          --teal:       #2CCED1;
-          --teal-d:     #1ab8bb;
-          --light:      #F4F4F4;
-          --white:      #FFFFFF;
-          --orange:     #FF8A5B;
-          --dark:       #0d1e28;
-          --nav-text:   #2a3f50;
-          --nav-muted:  rgba(26,48,64,0.62);
-          --nav-h:      68px;
+          --teal:      #2CCED1;
+          --teal-d:    #1ab8bb;
+          --light:     #F4F4F4;
+          --white:     #FFFFFF;
+          --orange:    #FF8A5B;
+          --dark:      #0d1e28;
+          --nav-text:  #2a3f50;
+          --nav-muted: rgba(26,48,64,0.62);
+          --nav-h:     68px;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'DM Sans', sans-serif; }
 
-        /* ═══ SHELL ═══ */
+        /* ── SHELL ── */
         .nav-shell {
           position: fixed; top: 0; left: 0; right: 0;
           z-index: 1000; height: var(--nav-h);
@@ -110,89 +106,70 @@ export default function Navbar() {
           display: flex; align-items: center; justify-content: space-between; gap: 40px;
         }
 
-        /* ═══ LOGO ═══ */
+        /* ── LOGO ── */
         .nav-logo {
-          display: flex; align-items: center; gap: 11px;
+          display: flex; align-items: center;
           text-decoration: none; flex-shrink: 0;
-          opacity: 0; animation: navFD .7s cubic-bezier(.22,.68,0,1.2) .1s both;
+          opacity: 0;
+          animation: navFD .7s cubic-bezier(.22,.68,0,1.2) .1s both;
+          transition: transform .3s cubic-bezier(.34,1.56,.64,1), filter .3s ease;
         }
+        .nav-logo:hover {
+          transform: scale(1.03);
+          filter: drop-shadow(0 2px 12px rgba(44,206,209,0.28));
+        }
+
+        /*
+          The SRK Hospital logo (image.png) has a dark/black background.
+          We use a white background pill + object-fit:contain so the logo
+          sits cleanly on the white navbar without any colour clash.
+          If the image is a transparent-bg PNG, remove background/padding/border-radius.
+        */
+        .nav-logo-img {
+          height: 46px;          /* fits 68px nav with comfortable breathing room */
+          width: auto;
+          display: block;
+          object-fit: contain;
+          /* white pill wraps the dark-bg logo so it blends into the white navbar */
+          background: #ffffff;
+          padding: 4px 10px;
+          border-radius: 8px;
+          // border: 1px solid rgba(0,0,0,0.06);
+        }
+
         @keyframes navFD {
           from { opacity:0; transform:translateY(-14px); }
           to   { opacity:1; transform:translateY(0); }
         }
-        .logo-mark {
-          position: relative; width: 40px; height: 40px;
-          background: linear-gradient(135deg, #2CCED1, #FF8A5B);
-          border-radius: 10px;
-          display: flex; align-items: center; justify-content: center;
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 18px; font-weight: 600; color: #fff;
-          transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
-        }
-        .nav-logo:hover .logo-mark {
-          transform: scale(1.08) rotate(-3deg);
-          box-shadow: 0 0 0 6px rgba(44,206,209,0.13), 0 4px 18px rgba(44,206,209,0.3);
-        }
-        .logo-pulse {
-          position: absolute; inset: 0; border-radius: 10px;
-          background: linear-gradient(135deg, #2CCED1, #FF8A5B);
-          opacity: 0; animation: lPulse 3s ease-in-out infinite 1.5s;
-        }
-        @keyframes lPulse { 0%,100%{transform:scale(1);opacity:0;} 50%{transform:scale(1.4);opacity:.18;} }
-        .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
-        .logo-name {
-          font-size: 15px; font-weight: 600;
-          color: var(--dark); letter-spacing: .2px; transition: color .2s;
-        }
-        .nav-logo:hover .logo-name { color: #2CCED1; }
-        .logo-sub {
-          font-size: 9.5px; font-weight: 400;
-          color: var(--nav-muted); letter-spacing: 1.8px; text-transform: uppercase;
-        }
 
-        /* ═══ DESKTOP LINKS ═══ */
+        /* ── DESKTOP LINKS ── */
         .nav-links {
           display: flex; align-items: center; gap: 2px;
           flex: 1; justify-content: center;
-          position: relative;          /* indicator positioned relative to THIS */
+          position: relative;
         }
 
-        /*
-          Indicator is now position:absolute inside .nav-links
-          so left values are offsets from the container — no viewport mismatch.
-        */
         .nav-indicator {
-          position: absolute;
-          bottom: -1px;               /* sits on the border-bottom of the nav */
-          height: 2.5px;
+          position: absolute; bottom: -1px; height: 2.5px;
           background: linear-gradient(90deg, #2CCED1, #FF8A5B);
-          border-radius: 2px 2px 0 0;
-          pointer-events: none;
+          border-radius: 2px 2px 0 0; pointer-events: none;
           transition: left .28s cubic-bezier(.4,0,.2,1),
                       width .28s cubic-bezier(.4,0,.2,1),
-                      opacity .2s ease,
-                      background .2s ease;
+                      opacity .2s ease, background .2s ease;
           z-index: 2;
         }
-        /* hover version — slightly transparent teal only */
         .nav-indicator.is-hover {
-          background: rgba(44,206,209,0.45);
-          height: 2px;
+          background: rgba(44,206,209,0.45); height: 2px;
         }
 
         .nav-link {
-          position: relative;
-          display: flex; align-items: center;
-          padding: 9px 16px;
-          font-size: 12.5px; font-weight: 500;
-          color: var(--nav-text);
-          text-decoration: none;
+          position: relative; display: flex; align-items: center;
+          padding: 9px 16px; font-size: 12.5px; font-weight: 500;
+          color: var(--nav-text); text-decoration: none;
           letter-spacing: 0.07em; text-transform: uppercase;
           border-radius: 8px;
-          /* ← NO colour transition needed here; indicator handles active state */
           transition: color .2s ease, background .2s ease;
-          white-space: nowrap;
-          opacity: 0;
+          white-space: nowrap; opacity: 0;
           animation: navFD .7s cubic-bezier(.22,.68,0,1.2) both;
         }
         .nav-link:nth-child(1) { animation-delay: .18s; }
@@ -201,38 +178,24 @@ export default function Navbar() {
         .nav-link:nth-child(4) { animation-delay: .42s; }
         .nav-link:nth-child(5) { animation-delay: .50s; }
 
-        /* ALL links (including active) get the same hover background */
-        .nav-link:hover {
-          color: var(--dark);
-          background: rgba(44,206,209,0.07);
-        }
-
-        /* active — just bolder, colour stays the same as other links */
-        .nav-link.active {
-          color: var(--dark);
-          font-weight: 600;
-        }
-
-        /* active dot under active link */
+        .nav-link:hover { color: var(--dark); background: rgba(44,206,209,0.07); }
+        .nav-link.active { color: var(--dark); font-weight: 600; }
         .nav-link.active::after {
-          content: '';
-          position: absolute; bottom: 3px; left: 50%;
+          content: ''; position: absolute; bottom: 3px; left: 50%;
           transform: translateX(-50%);
           width: 4px; height: 4px; border-radius: 50%;
-          background: #2CCED1;
-          box-shadow: 0 0 7px rgba(44,206,209,.85);
+          background: #2CCED1; box-shadow: 0 0 7px rgba(44,206,209,.85);
         }
 
-        /* ═══ CTA + PHONE ═══ */
+        /* ── CTA ── */
         .nav-cta-wrap {
           flex-shrink: 0; display: flex; align-items: center; gap: 14px;
           opacity: 0; animation: navFD .7s cubic-bezier(.22,.68,0,1.2) .54s both;
         }
         .nav-phone {
           display: flex; align-items: center; gap: 7px;
-          font-size: 12px; font-weight: 500;
-          color: var(--nav-text); text-decoration: none; letter-spacing: .04em;
-          transition: color .2s;
+          font-size: 12px; font-weight: 500; color: var(--nav-text);
+          text-decoration: none; letter-spacing: .04em; transition: color .2s;
         }
         .nav-phone:hover { color: #2CCED1; }
         .phone-icon {
@@ -245,12 +208,10 @@ export default function Navbar() {
 
         .btn-book {
           position: relative; overflow: hidden;
-          display: flex; align-items: center; gap: 8px;
-          padding: 10px 22px;
+          display: flex; align-items: center; gap: 8px; padding: 10px 22px;
           background: linear-gradient(135deg, #2CCED1, #1ab8bb);
           border: none; border-radius: 8px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px; font-weight: 600;
+          font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
           letter-spacing: .07em; text-transform: uppercase;
           color: #fff; cursor: pointer; text-decoration: none;
           box-shadow: 0 4px 16px rgba(44,206,209,.34), 0 1px 4px rgba(0,0,0,.06);
@@ -266,18 +227,16 @@ export default function Navbar() {
         .btn-book:hover::before { opacity: 1; }
         .btn-book span { position: relative; z-index: 1; }
         .btn-book-dot {
-          position: relative; z-index: 1;
-          width: 6px; height: 6px; border-radius: 50%;
-          background: rgba(255,255,255,.75);
+          position: relative; z-index: 1; width: 6px; height: 6px;
+          border-radius: 50%; background: rgba(255,255,255,.75);
           animation: bDot 2s ease-in-out infinite;
         }
         @keyframes bDot { 0%,100%{opacity:.75;transform:scale(1);} 50%{opacity:1;transform:scale(1.45);} }
 
-        /* ═══ HAMBURGER ═══ */
+        /* ── HAMBURGER ── */
         .nav-burger {
           display: none; flex-direction: column; gap: 5px;
-          width: 36px; height: 36px;
-          align-items: center; justify-content: center;
+          width: 36px; height: 36px; align-items: center; justify-content: center;
           background: none; border: none; cursor: pointer;
           padding: 4px; border-radius: 8px; transition: background .2s;
         }
@@ -292,64 +251,42 @@ export default function Navbar() {
         .nav-burger.open .burger-bar:nth-child(2) { opacity: 0; width: 0; }
         .nav-burger.open .burger-bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-        /* ═══ MOBILE MENU ═══ */
+        /* ── MOBILE MENU ── */
         .mobile-menu {
           position: fixed; top: var(--nav-h); left: 0; right: 0;
-          background: rgba(255,255,255,0.99);
-          backdrop-filter: blur(24px);
+          background: rgba(255,255,255,0.99); backdrop-filter: blur(24px);
           border-bottom: 1px solid rgba(44,206,209,.14);
           z-index: 999; overflow: hidden;
           max-height: 0; opacity: 0;
           transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .35s ease;
         }
         .mobile-menu.open { max-height: 540px; opacity: 1; }
-        .mobile-menu-inner {
-          padding: 20px 24px 28px;
-          display: flex; flex-direction: column; gap: 4px;
-        }
+        .mobile-menu-inner { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 4px; }
         .mobile-link {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 14px 16px;
-          font-size: 13.5px; font-weight: 500;
-          color: var(--nav-text);
+          padding: 14px 16px; font-size: 13.5px; font-weight: 500; color: var(--nav-text);
           text-decoration: none; letter-spacing: .06em; text-transform: uppercase;
           border-radius: 10px; border: 1px solid transparent;
           transition: color .2s, background .2s, border-color .2s;
         }
-        .mobile-link:hover {
-          color: var(--dark);
-          background: rgba(44,206,209,.07);
-          border-color: rgba(44,206,209,.16);
-        }
-        .mobile-link.active {
-          color: #2CCED1; font-weight: 600;
-          background: rgba(44,206,209,.06);
-          border-color: rgba(44,206,209,.16);
-        }
+        .mobile-link:hover { color: var(--dark); background: rgba(44,206,209,.07); border-color: rgba(44,206,209,.16); }
+        .mobile-link.active { color: #2CCED1; font-weight: 600; background: rgba(44,206,209,.06); border-color: rgba(44,206,209,.16); }
         .mobile-link-arrow { opacity: .35; transition: opacity .2s, transform .2s; }
         .mobile-link:hover .mobile-link-arrow { opacity: .75; transform: translateX(3px); }
-        .mobile-divider {
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(44,206,209,.2), transparent);
-          margin: 10px 0;
-        }
+        .mobile-divider { height: 1px; background: linear-gradient(90deg,transparent,rgba(44,206,209,.2),transparent); margin: 10px 0; }
         .mobile-cta {
-          display: flex; align-items: center; justify-content: center; gap: 8px;
-          padding: 14px;
-          background: linear-gradient(135deg, #2CCED1, #1ab8bb);
-          border-radius: 10px;
-          font-size: 13px; font-weight: 600;
-          letter-spacing: .08em; text-transform: uppercase;
+          display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px;
+          background: linear-gradient(135deg, #2CCED1, #1ab8bb); border-radius: 10px;
+          font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
           color: #fff; text-decoration: none; margin-top: 8px;
-          box-shadow: 0 4px 18px rgba(44,206,209,.34);
-          transition: transform .2s, box-shadow .2s;
+          box-shadow: 0 4px 18px rgba(44,206,209,.34); transition: transform .2s, box-shadow .2s;
         }
         .mobile-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(44,206,209,.44); }
         .mobile-contact {
           display: flex; align-items: center; justify-content: center; gap: 8px;
-          padding: 12px; font-size: 13px; font-weight: 500;
-          color: var(--nav-text); text-decoration: none; letter-spacing: .04em;
-          border-radius: 10px; transition: color .2s, background .2s;
+          padding: 12px; font-size: 13px; font-weight: 500; color: var(--nav-text);
+          text-decoration: none; letter-spacing: .04em; border-radius: 10px;
+          transition: color .2s, background .2s;
         }
         .mobile-contact:hover { color: #2CCED1; background: rgba(44,206,209,.06); }
 
@@ -359,10 +296,9 @@ export default function Navbar() {
           .nav-links, .nav-phone { display: none; }
           .nav-burger { display: flex; }
           .nav-inner { padding: 0 20px; }
+          .nav-logo-img { height: 38px; }
         }
-        @media (max-width: 480px) {
-          .btn-book { display: none; }
-        }
+        @media (max-width: 480px) { .btn-book { display: none; } }
       `}</style>
 
       <ScrollProgress />
@@ -373,29 +309,22 @@ export default function Navbar() {
       >
         <div className="nav-inner">
 
-          {/* LOGO */}
+          {/* ── LOGO — /public/image.png ── */}
           <Link to="/" className="nav-logo" aria-label="SRK Hospital Home">
-            <div className="logo-mark">
-              <div className="logo-pulse" />
-              S
-            </div>
-            <div className="logo-text">
-              <span className="logo-name">SRK Hospital</span>
-              <span className="logo-sub">Urology Center</span>
-            </div>
+            <img
+              src="/image.png"
+              alt="SRK Hospital — Superspeciality Hospital"
+              className="nav-logo-img"
+            />
           </Link>
 
-          {/* DESKTOP NAV */}
+          {/* ── DESKTOP NAV ── */}
           <nav
             ref={linksContainerRef}
             className="nav-links"
             role="navigation"
             aria-label="Main navigation"
           >
-            {/* 
-              Show hover indicator while hovering, otherwise show active indicator.
-              Both use container-relative offsets — no viewport shift issues.
-            */}
             {hoverOffset && (
               <span
                 className="nav-indicator is-hover"
@@ -423,23 +352,23 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* CTA */}
+          {/* ── CTA ── */}
           <div className="nav-cta-wrap">
-            <a href="tel:+911234567890" className="nav-phone" aria-label="Call us">
+            <a href="tel:+919887711224" className="nav-phone" aria-label="Call us">
               <div className="phone-icon">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67 2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              +91 98765 43210
+              +91 9887711224
             </a>
-            <Link to="/medical-services" className="btn-book">
+            <a href="tel:+919887711224" className="btn-book">
               <div className="btn-book-dot" />
               <span>Book Consultation</span>
-            </Link>
+            </a>
           </div>
 
-          {/* MOBILE TOGGLE */}
+          {/* ── MOBILE TOGGLE ── */}
           <button
             className={`nav-burger${mobileOpen ? " open" : ""}`}
             onClick={() => setMobileOpen(o => !o)}
@@ -453,7 +382,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE MENU */}
+      {/* ── MOBILE MENU ── */}
       <div
         className={`mobile-menu${mobileOpen ? " open" : ""}`}
         role="navigation"
@@ -475,16 +404,16 @@ export default function Navbar() {
 
           <div className="mobile-divider" />
 
-          <a href="tel:+911234567890" className="mobile-contact">
+          <a href="tel:+919887711224" className="mobile-contact">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67 2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            +91 98765 43210
+            +91 9887711224
           </a>
 
-          <Link to="/medical-services" className="mobile-cta">
+          <a href="tel:+919887711224" className="mobile-cta">
             Book a Consultation
-          </Link>
+          </a>
         </div>
       </div>
 

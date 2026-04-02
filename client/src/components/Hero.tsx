@@ -37,24 +37,20 @@ function KidneySVG({ uid, className = "", style }: {
   return (
     <svg className={className} style={style} viewBox="0 0 220 290" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        {/* main body gradient — rich warm tones */}
         <radialGradient id={`body-${uid}`} cx="38%" cy="30%" r="68%">
           <stop offset="0%"   stopColor="#FF9B6A" />
           <stop offset="30%"  stopColor="#e8622a" />
           <stop offset="65%"  stopColor="#c44018" />
           <stop offset="100%" stopColor="#2CCED1" stopOpacity="0.6" />
         </radialGradient>
-        {/* medulla shadow */}
         <radialGradient id={`med-${uid}`} cx="50%" cy="50%" r="50%">
           <stop offset="0%"   stopColor="#FF8A5B" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#0d2030"  stopOpacity="0.4" />
         </radialGradient>
-        {/* ureter gradient */}
         <linearGradient id={`uret-${uid}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"   stopColor="#FF8A5B" />
           <stop offset="100%" stopColor="#2CCED1" />
         </linearGradient>
-        {/* rim light */}
         <linearGradient id={`rim-${uid}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%"   stopColor="#FF9B6A" stopOpacity="0.9" />
           <stop offset="100%" stopColor="#2CCED1"  stopOpacity="0.5" />
@@ -72,48 +68,31 @@ function KidneySVG({ uid, className = "", style }: {
         </clipPath>
       </defs>
 
-      {/* outer body */}
       <path
         d="M110 14 C66 14 32 50 28 96 C24 142 40 184 66 208 C82 222 96 226 108 224 C115 223 120 216 120 208 C120 199 113 192 113 183 C113 173 120 166 130 165 C150 163 168 150 177 132 C193 106 193 66 179 40 C165 16 140 14 110 14Z"
         fill={`url(#body-${uid})`}
       />
-
-      {/* dark cortex top zone */}
       <path
         d="M110 34 C80 34 56 56 52 86 C52 86 72 74 110 74 C148 74 168 86 168 86 C164 56 140 34 110 34Z"
         fill="rgba(10,24,36,0.52)"
       />
-
-      {/* renal sinus / pelvis */}
       <ellipse cx="110" cy="142" rx="22" ry="30" fill={`url(#med-${uid})`} opacity="0.85"/>
-
-      {/* major calyces */}
       <ellipse cx="96"  cy="118" rx="10" ry="6.5" fill="rgba(255,138,91,0.3)"  transform="rotate(-24 96 118)"/>
       <ellipse cx="124" cy="125" rx="9"  ry="5.5" fill="rgba(255,138,91,0.24)" transform="rotate(18 124 125)"/>
       <ellipse cx="106" cy="162" rx="10" ry="6.5" fill="rgba(255,138,91,0.26)" transform="rotate(-6 106 162)"/>
-
-      {/* minor calyces detail */}
       <ellipse cx="90"  cy="108" rx="5"  ry="3.5" fill="rgba(255,160,100,0.2)" transform="rotate(-20 90 108)"/>
       <ellipse cx="120" cy="112" rx="4.5" ry="3"  fill="rgba(255,160,100,0.18)" transform="rotate(22 120 112)"/>
-
-      {/* ureter */}
       <path
         d="M110 224 C110 238 108 250 106 264"
         stroke={`url(#uret-${uid})`} strokeWidth="6.5" strokeLinecap="round" fill="none"
         filter={`url(#glow-${uid})`}
       />
-
-      {/* surface texture arcs */}
       <path d="M54 90 Q72 78 92 88"  stroke="rgba(255,138,91,0.28)" strokeWidth="1.6" fill="none" strokeLinecap="round"/>
       <path d="M48 122 Q64 112 82 120" stroke="rgba(255,138,91,0.22)" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
       <path d="M50 154 Q66 146 82 154" stroke="rgba(255,138,91,0.17)" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
       <path d="M56 184 Q70 177 84 184" stroke="rgba(255,138,91,0.12)" strokeWidth="1"   fill="none" strokeLinecap="round"/>
-
-      {/* specular highlight blob */}
       <ellipse cx="76" cy="68" rx="20" ry="11" fill="rgba(255,240,220,0.24)" transform="rotate(-32 76 68)"/>
       <ellipse cx="62" cy="112" rx="9"  ry="19" fill="rgba(255,220,200,0.12)" transform="rotate(-10 62 112)"/>
-
-      {/* rim light edge glow */}
       <path
         d="M110 14 C140 14 165 16 179 40 C193 66 193 106 177 132"
         stroke={`url(#rim-${uid})`} strokeWidth="3" fill="none"
@@ -123,8 +102,6 @@ function KidneySVG({ uid, className = "", style }: {
         d="M110 14 C140 14 165 16 179 40 C193 66 193 106 177 132"
         stroke="rgba(255,155,106,0.55)" strokeWidth="1.5" fill="none" strokeLinecap="round"
       />
-
-      {/* inner vascular detail lines */}
       <path d="M96 88 Q106 100 110 120 Q114 140 106 155"  stroke="rgba(255,100,60,0.18)" strokeWidth="1" fill="none"/>
       <path d="M122 90 Q116 105 112 125 Q108 145 114 160" stroke="rgba(255,100,60,0.14)" strokeWidth="1" fill="none"/>
     </svg>
@@ -143,9 +120,9 @@ function useMouse() {
 }
 
 export default function HeroSection() {
-  const [mounted, setMounted]         = useState(false);
+  const [mounted, setMounted]           = useState(false);
   const [statsStarted, setStatsStarted] = useState(false);
-  const [hoveredWord, setHoveredWord] = useState<number | null>(null);
+  const [hoveredWord, setHoveredWord]   = useState<number | null>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const mouse    = useMouse();
 
@@ -165,16 +142,8 @@ export default function HeroSection() {
 
   const on = mounted ? "on" : "";
 
-  /* parallax offset for main kidney */
   const px = (mouse.x - 0.5) * 28;
   const py = (mouse.y - 0.5) * 18;
-
-  const words = [
-    { text: "Precision",     color: "var(--dark)",    hoverColor: "#2CCED1" },
-    { text: "Urology,",      color: "#2CCED1",        hoverColor: "#FF8A5B" },
-    { text: "Compassionate", color: "transparent",    hoverColor: "transparent", outline: true },
-    { text: "Healing.",      color: "#FF8A5B",        hoverColor: "#2CCED1",     italic: true },
-  ];
 
   const particles = Array.from({ length: 26 }, (_, i) => ({
     width:  `${3 + ((i * 37) % 7)}px`,
@@ -197,18 +166,15 @@ export default function HeroSection() {
         }
         body{font-family:'DM Sans',sans-serif;background:var(--light);}
 
-        /* ═══ ROOT ═══ */
         .hero-root{
           position:relative;min-height:100vh;background:var(--light);
           overflow:hidden;display:flex;flex-direction:column;
         }
-        /* noise grain */
         .hero-root::before{
           content:'';position:absolute;inset:0;
           background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
           opacity:.018;pointer-events:none;z-index:0;
         }
-        /* teal top-left radial */
         .hero-root::after{
           content:'';position:absolute;width:960px;height:960px;
           top:-340px;left:-260px;border-radius:50%;
@@ -235,7 +201,6 @@ export default function HeroSection() {
         .particle{position:absolute;border-radius:50%;pointer-events:none;z-index:1;animation:pRise linear infinite;}
         @keyframes pRise{0%{transform:translateY(20px) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-110px) scale(1.3);opacity:0;}}
 
-        /* ═══ BG KIDNEYS ═══ */
         .kidney-bg-1{
           position:absolute;width:500px;height:625px;left:-100px;top:50%;
           transform:translateY(-54%);z-index:1;pointer-events:none;
@@ -266,7 +231,6 @@ export default function HeroSection() {
         .kidney-bg-3.on{opacity:.05;}
         @keyframes kb3{0%,100%{transform:rotate(-10deg) translateY(0);}50%{transform:rotate(7deg) translateY(-18px);}}
 
-        /* ═══ FG KIDNEY MAIN ═══ */
         .kidney-fg-wrap{
           position:absolute;width:320px;height:400px;
           right:52px;top:50%;
@@ -292,7 +256,6 @@ export default function HeroSection() {
           100%{transform:rotate(-2deg) translateY(0px)   scale(1);}
         }
 
-        /* ── glow halo behind kidney ── */
         .kidney-halo{
           position:absolute;
           width:280px;height:320px;
@@ -311,7 +274,6 @@ export default function HeroSection() {
           50%     {transform:translate(-50%,-52%) scale(1.15);opacity:1;}
         }
 
-        /* ── pulse rings ── */
         .pulse-rings{position:absolute;inset:-30%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
         .pr{position:absolute;border-radius:50%;animation:prEx 3.8s ease-out infinite;}
         .pr-1{width:86%;height:86%;border:1.5px solid rgba(255,138,91,.52);animation-delay:0s;}
@@ -319,7 +281,6 @@ export default function HeroSection() {
         .pr-3{width:128%;height:128%;border:1px solid rgba(44,206,209,.22);animation-delay:2.52s;}
         @keyframes prEx{0%{transform:scale(.65);opacity:.9;}100%{transform:scale(1.2);opacity:0;}}
 
-        /* ── teal scan line ── */
         .kidney-scan{
           position:absolute;left:0;right:0;height:2px;
           background:linear-gradient(to right,transparent,rgba(44,206,209,.85),transparent);
@@ -327,7 +288,6 @@ export default function HeroSection() {
         }
         @keyframes scanL{0%{top:0%;opacity:0;}4%{opacity:1;}92%{opacity:.9;}100%{top:100%;opacity:0;}}
 
-        /* ── orbiting dots ── */
         .orbit-wrap{position:absolute;inset:-22%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
         .od{position:absolute;border-radius:50%;top:50%;left:50%;}
         .od-1{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;background:#FF8A5B;box-shadow:0 0 14px rgba(255,138,91,1),0 0 28px rgba(255,138,91,.5);animation:orb1 5.8s linear infinite;}
@@ -337,7 +297,6 @@ export default function HeroSection() {
         @keyframes orb2{from{transform:rotate(120deg) translateX(135px) rotate(-120deg);}to{transform:rotate(480deg) translateX(135px) rotate(-480deg);}}
         @keyframes orb3{from{transform:rotate(240deg) translateX(100px) rotate(-240deg);}to{transform:rotate(600deg) translateX(100px) rotate(-600deg);}}
 
-        /* ── anatomy dashed rings ── */
         .anat-ring{position:absolute;border-radius:50%;pointer-events:none;}
         .ar-1{width:360px;height:360px;top:50%;left:52%;margin:-180px 0 0 -180px;z-index:7;border:1px dashed rgba(44,206,209,.22);animation:ringR 24s linear infinite;opacity:0;transition:opacity 1.5s ease 1.8s;}
         .ar-1.on{opacity:1;}
@@ -345,14 +304,12 @@ export default function HeroSection() {
         .ar-2.on{opacity:1;}
         @keyframes ringR{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 
-        /* ── tick marks on rings ── */
         .ring-tick{
           position:absolute;width:6px;height:6px;border-radius:50%;
           background:#2CCED1;box-shadow:0 0 6px rgba(44,206,209,.8);
           top:50%;left:50%;transform-origin:0 0;
         }
 
-        /* small FG kidneys */
         .kidney-sm{
           position:absolute;width:130px;height:163px;left:54px;bottom:108px;
           z-index:8;pointer-events:none;
@@ -375,31 +332,28 @@ export default function HeroSection() {
         .kidney-xs.on{opacity:.38;}
         @keyframes kxs{0%,100%{transform:rotate(-20deg) scale(1) translateY(0);}50%{transform:rotate(-12deg) scale(1.05) translateY(-8px);}}
 
-        /* ── vessels ── */
         .vessels{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity 1.8s ease 1.9s;}
         .vessels.on{opacity:1;}
 
-        /* ── vitals ECG ── */
         .vitals-strip{position:absolute;bottom:148px;right:378px;z-index:10;pointer-events:none;opacity:0;transition:opacity 1s ease 2.1s;}
         .vitals-strip.on{opacity:1;}
         .ecg-path{stroke-dasharray:340;stroke-dashoffset:340;transition:stroke-dashoffset 3.2s ease 2.3s;}
         .ecg-path.draw{stroke-dashoffset:0;}
         .vitals-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(44,206,209,.72);text-align:right;margin-top:4px;}
 
-        /* ── GFR badge ── */
+        /* ── credential badge (replaces GFR) ── */
         .gfr-badge{
           position:absolute;right:56px;top:calc(50% + 134px);z-index:12;
-          background:rgba(255,255,255,.93);border:1px solid rgba(255,138,91,.3);border-left:3px solid #FF8A5B;
+          background:rgba(255,255,255,.93);border:1px solid rgba(212,160,23,.3);border-left:3px solid #D4A017;
           padding:11px 15px;backdrop-filter:blur(14px);
-          box-shadow:0 8px 28px rgba(255,138,91,.16);
+          box-shadow:0 8px 28px rgba(212,160,23,.16);
           opacity:0;transform:translateX(22px);transition:opacity .95s ease 2.25s,transform .95s ease 2.25s;
         }
         .gfr-badge.on{opacity:1;transform:translateX(0);}
-        .gb-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#FF8A5B;margin-bottom:3px;font-weight:500;}
+        .gb-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#D4A017;margin-bottom:3px;font-weight:500;}
         .gb-val{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);line-height:1;font-weight:600;}
         .gb-sub{font-size:9px;color:rgba(26,48,64,.5);margin-top:2px;}
 
-        /* ── anatomy label ── */
         .anat-lbl{
           position:absolute;right:56px;top:calc(50% - 218px);z-index:12;
           opacity:0;transform:translateX(18px);
@@ -451,7 +405,7 @@ export default function HeroSection() {
         .hero-content{
           position:relative;z-index:15;flex:1;
           display:flex;flex-direction:column;align-items:center;justify-content:center;
-          padding:56px 64px 36px;text-align:center;
+          padding:36px 64px 36px;text-align:center;
         }
 
         /* eyebrow */
@@ -470,14 +424,14 @@ export default function HeroSection() {
         /* ── H1 interactive words ── */
         .hero-h1{
           font-family:'Cormorant Garamond',serif;
-          font-size:clamp(3rem,5.8vw,5.6rem);
-          font-weight:600;line-height:1.08;
+          font-size:clamp(3rem,5.8vw,5.25rem);
+          font-weight:600;line-height:1.18;
           display:flex;flex-wrap:wrap;justify-content:center;gap:.2em;
           white-space:nowrap;overflow:visible;margin-bottom:0;
         }
 
         .h1-word{
-          display:inline-block;overflow:hidden;vertical-align:bottom;
+          display:inline-block;vertical-align:bottom;
           cursor:default;
         }
         .h1-word-inner{
@@ -492,14 +446,12 @@ export default function HeroSection() {
           filter:drop-shadow(0 4px 16px rgba(44,206,209,.35));
         }
 
-        /* word reveal delays */
         .h1-word:nth-child(1) .h1-word-inner{animation-delay:.42s;}
         .h1-word:nth-child(2) .h1-word-inner{animation-delay:.56s;}
         .h1-word:nth-child(3) .h1-word-inner{animation-delay:.70s;}
         .h1-word:nth-child(4) .h1-word-inner{animation-delay:.84s;}
         @keyframes wordUp{from{transform:translateY(110%) skewY(3deg);opacity:0;}to{transform:translateY(0) skewY(0deg);opacity:1;}}
 
-        /* word colour classes */
         .wc-dark{color:var(--dark);}
         .wc-dark:hover .h1-word-inner{filter:drop-shadow(0 4px 16px rgba(44,206,209,.4));}
 
@@ -547,7 +499,7 @@ export default function HeroSection() {
 
         /* subtitle */
         .hero-sub{
-          max-width:540px;font-size:16px;line-height:1.82;font-weight:300;
+          max-width:560px;font-size:16px;line-height:1.82;font-weight:300;
           color:rgba(26,48,64,.6);margin:26px auto 0;
           opacity:0;transform:translateY(20px);
           transition:opacity .95s ease .92s,transform .95s ease .92s;
@@ -555,8 +507,23 @@ export default function HeroSection() {
         .hero-sub.on{opacity:1;transform:translateY(0);}
         .hero-sub strong{color:var(--dark);font-weight:500;}
 
+        /* credential pills under subtitle */
+        .cred-row{
+          display:flex;align-items:center;gap:8px;margin-top:14px;
+          flex-wrap:wrap;justify-content:center;
+          opacity:0;transition:opacity .95s ease 1.0s;
+        }
+        .cred-row.on{opacity:1;}
+        .cred-pill{
+          font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+          padding:4px 12px;border-radius:100px;
+        }
+        .cp-gold{background:rgba(212,160,23,.12);color:#b8860b;border:1px solid rgba(212,160,23,.3);}
+        .cp-teal{background:rgba(44,206,209,.1);color:#2CCED1;border:1px solid rgba(44,206,209,.28);}
+        .cp-ink{background:rgba(13,30,40,.06);color:rgba(13,30,40,.55);border:1px solid rgba(13,30,40,.1);}
+
         /* CTA */
-        .cta-row{display:flex;align-items:center;gap:18px;margin-top:44px;opacity:0;transform:translateY(20px);transition:opacity .95s ease 1.05s,transform .95s ease 1.05s;}
+        .cta-row{display:flex;align-items:center;gap:18px;margin-top:36px;opacity:0;transform:translateY(20px);transition:opacity .95s ease 1.05s,transform .95s ease 1.05s;}
         .cta-row.on{opacity:1;transform:translateY(0);}
 
         .btn-primary{
@@ -585,14 +552,14 @@ export default function HeroSection() {
         .btn-ghost:hover svg{transform:translateX(4px);}
 
         /* divider */
-        .divider-row{display:flex;align-items:center;gap:16px;margin-top:52px;width:100%;max-width:680px;opacity:0;transition:opacity .95s ease 1.22s;}
+        .divider-row{display:flex;align-items:center;gap:16px;margin-top:44px;width:100%;max-width:680px;opacity:0;transition:opacity .95s ease 1.22s;}
         .divider-row.on{opacity:1;}
         .divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(44,206,209,.22),transparent);}
         .divider-text{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,48,64,.28);white-space:nowrap;}
 
         /* stats */
         .stats-row{
-          display:flex;gap:0;margin-top:32px;width:100%;max-width:680px;
+          display:flex;gap:0;margin-top:28px;width:100%;max-width:720px;
           border:1px solid rgba(44,206,209,.14);border-radius:16px;overflow:hidden;
           background:rgba(255,255,255,.82);backdrop-filter:blur(16px);
           box-shadow:0 4px 32px rgba(44,206,209,.08);
@@ -601,7 +568,7 @@ export default function HeroSection() {
         }
         .stats-row.on{opacity:1;transform:translateY(0);}
         .stat-card{
-          flex:1;padding:22px 18px;border-right:1px solid rgba(44,206,209,.1);
+          flex:1;padding:22px 14px;border-right:1px solid rgba(44,206,209,.1);
           text-align:center;position:relative;
           animation:fSlideUp .75s ease both;
           transition:background .25s;
@@ -612,7 +579,7 @@ export default function HeroSection() {
         .stat-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40%;height:2px;background:linear-gradient(90deg,transparent,#FF8A5B,transparent);}
         .stat-value{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;background:linear-gradient(135deg,#2CCED1,#FF8A5B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
         .stat-suffix{font-size:1.6rem;}
-        .stat-label{font-size:10px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;color:rgba(26,48,64,.38);margin-top:6px;}
+        .stat-label{font-size:9.5px;font-weight:400;letter-spacing:1.4px;text-transform:uppercase;color:rgba(26,48,64,.38);margin-top:6px;}
 
         /* bottom bar */
         .bottom-bar{
@@ -696,17 +663,18 @@ export default function HeroSection() {
               stroke="rgba(44,206,209,0.72)" strokeWidth="1.5" fill="none" strokeLinecap="round"
             />
           </svg>
-          <div className="vitals-lbl">HR 72 · Renal Perfusion Active</div>
+          {/* ── updated vitals label ── */}
+          <div className="vitals-lbl">Urology · SRK Hospital Jaipur</div>
         </div>
 
-        {/* ── anatomy label ── */}
-        <div className={"anat-lbl " + on}>Renal Anatomy</div>
+        {/* ── anatomy label — updated ── */}
+        <div className={"anat-lbl " + on}>Renal Transplant</div>
 
-        {/* ── GFR badge ── */}
+        {/* ── credential badge (replaces GFR) ── */}
         <div className={"gfr-badge " + on}>
-          <div className="gb-lbl">Kidney Function</div>
-          <div className="gb-val">GFR 94</div>
-          <div className="gb-sub">mL / min / 1.73m²</div>
+          <div className="gb-lbl">Gold Medallist</div>
+          <div className="gb-val">M.Ch.</div>
+          <div className="gb-sub">Urology · Kolkata</div>
         </div>
 
         {/* ── halo glow behind kidney ── */}
@@ -732,33 +700,26 @@ export default function HeroSection() {
         <KidneySVG uid="sm1" className={"kidney-sm " + on} />
         <KidneySVG uid="xs1" className={"kidney-xs " + on} />
 
-        {/* ══ NAVBAR ══ */}
-        {/* <nav className={"navbar " + on}>
-          <div className="logo-mark">
-            <div className="logo-icon">S</div>
-            <div>
-              <div className="logo-name">SRK Hospital</div>
-              <div className="logo-sub">Urology Center</div>
-            </div>
-          </div>
-          <div className="nav-links">
-            {["Services","About","Expertise","Contact"].map(l => <a key={l} href="#">{l}</a>)}
-          </div>
-          <div className="nav-badge"><div className="badge-dot" />Accepting Appointments</div>
-        </nav> */}
+        {/* ══ NAVBAR (kept commented as original) ══ */}
+        {/* <nav className={"navbar " + on}>...</nav> */}
 
         {/* ══ MAIN CONTENT ══ */}
         <main className="hero-content">
+
+          {/* ── updated eyebrow ── */}
           <div className={"eyebrow " + on}>
-            <div className="eyebrow-dash" />Advanced Urological Excellence<div className="eyebrow-dash" />
+            <div className="eyebrow-dash" />
+            Senior Urologist · Jaipur, Rajasthan
+            <div className="eyebrow-dash" />
           </div>
 
+          {/* ── updated H1: Kidney Care, / World-Class / Surgery & / Transplant. ── */}
           <h1 className="hero-h1">
             {[
-              { text: "Precision",     cls: "wc-dark"    },
-              { text: "Urology,",      cls: "wc-teal"    },
-              { text: "Compassionate", cls: "wc-outline" },
-              { text: "Healing.",      cls: "wc-orange"  },
+              { text: "Precision",  cls: "wc-dark"    },
+              { text: "Urology &",   cls: "wc-teal"    },
+              { text: "Compassionate",     cls: "wc-outline" },
+              { text: "Healing.",   cls: "wc-orange"  },
             ].map((w, i) => (
               <span
                 key={i}
@@ -771,39 +732,51 @@ export default function HeroSection() {
             ))}
           </h1>
 
+          {/* ── updated subtitle ── */}
           <p className={"hero-sub " + on}>
-            <strong>Dr. Rakesh Sharma</strong> leads SRK Hospital with decades of expertise in complex
-            urological care — offering personalized diagnosis, advanced treatments,
-            and a patient-first philosophy for faster recovery and lasting outcomes.
+            <strong>Dr. Rakesh Sharma</strong> — Gold Medallist M.Ch. Urologist and Director of{" "}
+            <strong>SRK Hospital, Jaipur</strong> — delivers 25+ years of precision urology: kidney stone
+            removal, renal transplantation, prostate surgery, and complex endo-urological procedures with
+            unmatched surgical expertise and genuine compassion.
           </p>
 
+          {/* ── NEW: credential pills ── */}
+          <div className={"cred-row " + on}>
+            <span className="cred-pill cp-gold">🥇 Gold Medallist · M.Ch. Urology</span>
+            <span className="cred-pill cp-teal">MBBS · M.S. · DNB</span>
+            <span className="cred-pill cp-ink">Director, SRK Hospital</span>
+          </div>
+
+          {/* ── updated CTA buttons ── */}
           <div className={"cta-row " + on}>
-            <button className="btn-primary"><span>Book a Consultation</span></button>
-            <button className="btn-ghost">
-              Explore Treatments
+            <a href="tel:+919887711224"  className="btn-primary"><span>Book Appointment</span></a>
+            <a href ="/medical-services" className="btn-ghost">
+              View Services
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </button>
+            </a>
           </div>
 
+          {/* ── updated divider text ── */}
           <div className={"divider-row " + on}>
             <div className="divider-line" />
-            <div className="divider-text">Trusted by thousands of patients</div>
+            <div className="divider-text">9000+ patients · 689+ advanced procedures</div>
             <div className="divider-line" />
           </div>
 
+          {/* ── updated stats: real Dr Sharma numbers ── */}
           <div ref={statsRef} className={"stats-row " + on}>
-            <StatCard value={15}   suffix="+"  label="Years of Expertise"   delay={0}   started={statsStarted} />
-            <StatCard value={8000} suffix="+"  label="Surgeries Performed"  delay={150} started={statsStarted} />
-            <StatCard value={98}   suffix="%"  label="Patient Satisfaction" delay={300} started={statsStarted} />
-            <StatCard value={24}   suffix="/7" label="Emergency Support"    delay={450} started={statsStarted} />
+            <StatCard value={25}   suffix="+"  label="Years of Experience"    delay={0}   started={statsStarted} />
+            <StatCard value={689}  suffix="+"  label="Advanced Procedures"    delay={150} started={statsStarted} />
+            <StatCard value={9000} suffix="+"  label="Happy Patients"         delay={300} started={statsStarted} />
+            <StatCard value={470}  suffix="+"  label="Compact Surgeries"      delay={450} started={statsStarted} />
           </div>
         </main>
 
-        {/* ══ BOTTOM BAR ══ */}
+        {/* ══ BOTTOM BAR — updated ══ */}
         <div className={"bottom-bar " + on}>
-          <div className="bottom-text">SRK Hospital · Urological Care Center · Jaipur</div>
+          <div className="bottom-text">SRK Hospital · Urology &amp; Renal Transplant · Jaipur, Rajasthan</div>
           <div className="scroll-hint">
             Scroll to explore
             <div className="scroll-arrow">

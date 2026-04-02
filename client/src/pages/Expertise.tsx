@@ -499,19 +499,19 @@ export default function Navbar() {
 
           {/* CTA + PHONE */}
           <div className="nav-cta-wrap">
-            <a href="tel:+911234567890" className="nav-phone" aria-label="Call us">
+            <a href="tel:+919887711224" className="nav-phone" aria-label="Call us">
               <div className="phone-icon">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67 2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              +91 98765 43210
+              +91 9887711224
             </a>
 
-            <Link to="/medical-services" className="btn-book">
+            <a href="tel:+919887711224" className="btn-book">
               <div className="btn-book-dot" />
               <span>Book Consultation</span>
-            </Link>
+            </a>
           </div>
 
           {/* MOBILE HAMBURGER */}
@@ -559,16 +559,16 @@ export default function Navbar() {
 
           <div className="mobile-divider" />
 
-          <a href="tel:+911234567890" className="mobile-contact">
+          <a href="tel:+919887711224" className="mobile-contact">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67 2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            +91 98765 43210
+            +91 988 7711 224
           </a>
 
-          <Link to="/medical-services" className="mobile-cta">
+          <a href="tel:+919887711224" className="mobile-cta">
             Book a Consultation
-          </Link>
+          </a>
         </div>
       </div>
 

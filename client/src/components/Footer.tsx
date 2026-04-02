@@ -21,7 +21,8 @@ const NAV_ITEMS = [
   { label: "Home",           path: "/"                            },
   { label: "Services",       path: "/medical-services"            },
   { label: "Expertise",      path: "/areas-of-expertise"          },
-  { label: "Why Dr. Sharma", path: "/why-choose-DrRakeshSharma"   },
+  { label: "Blogs",       path: "our-blogs"            },
+  { label: "About Us", path: "/why-choose-DrRakeshSharma"   },
 ];
 
 const SERVICES = [
@@ -40,7 +41,8 @@ const CONTACT = [
         <path d="M10 2C7.24 2 5 4.24 5 7c0 4.25 5 11 5 11s5-6.75 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1110 5a1.5 1.5 0 010 3.5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
       </svg>
     ),
-    text: "SMS Medical College Road,\nJaipur, Rajasthan — 302004",
+    text: "SRK Hospital, Jaipur, Rajasthan — 302004",
+    link: "https://maps.google.com/?q=SRK+Hospital+Jaipur",
   },
   {
     icon: (
@@ -57,7 +59,8 @@ const CONTACT = [
         <path d="M3.5 4A1.5 1.5 0 015 2.5h1.5a1 1 0 011 .8l.7 3.4a1 1 0 01-.3.95l-.9.9a11 11 0 005.5 5.5l.9-.9a1 1 0 01.95-.3l3.4.7a1 1 0 01.8 1V16a1.5 1.5 0 01-1.5 1.5C8.02 17.5 2.5 11.98 2.5 5A1.5 1.5 0 014 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    text: "+91 98765 43210",
+    text: "+91 9887711224",
+    link: "tel:+919887711224",
   },
   {
     icon: (
@@ -67,6 +70,7 @@ const CONTACT = [
       </svg>
     ),
     text: "contact@drrakeshsharma.com",
+    link: "mailto:contact@drrakeshsharma.com",
   },
 ];
 
@@ -264,49 +268,13 @@ export default function Footer() {
           <div style={{ maxWidth: "1260px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "clamp(20px,4vw,40px)", flexWrap: "wrap" }}>
 
             {/* LOGO — identical structure to navbar */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
-              {/* logo-mark — same gradient as navbar */}
-              <div style={{ position: "relative", width: "44px", height: "44px", flexShrink: 0 }}>
-                <div style={{
-                  width: "44px", height: "44px",
-                  background: "linear-gradient(135deg, #2CCED1, #FF8A5B)",
-                  borderRadius: "11px",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontSize: "19px", fontWeight: 600, color: T.white,
-                  position: "relative", zIndex: 1,
-                }}>S</div>
-                {/* pulse ring — same as navbar lPulse */}
-                <div className="ft2-logo-glow" style={{
-                  position: "absolute", inset: 0, borderRadius: "11px",
-                  background: "linear-gradient(135deg, #2CCED1, #FF8A5B)",
-                  opacity: 0,
-                }} />
-                {/* live dot */}
-                <div className="ft2-live-dot" style={{
-                  position: "absolute", bottom: "-2px", right: "-2px",
-                  width: "10px", height: "10px", borderRadius: "50%",
-                  background: T.teal, border: `2px solid ${T.dark}`, zIndex: 2,
-                }} />
-              </div>
-
-              <div style={{ lineHeight: 1.15 }}>
-                <div className="ft2-name-shimmer" style={{
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontSize: "clamp(1.3rem,2.8vw,1.75rem)",
-                  fontWeight: 600, letterSpacing: "0.2px",
-                }}>
-                  SRK Hospital
-                </div>
-                <div style={{
-                  fontFamily: "'DM Sans', system-ui, sans-serif",
-                  fontSize: "9.5px", fontWeight: 400, letterSpacing: "1.8px",
-                  textTransform: "uppercase", color: T.muted, marginTop: "1px",
-                }}>
-                  Urology Center
-                </div>
-              </div>
-            </div>
+            <Link to="/" className="nav-logo" aria-label="SRK Hospital Home">
+            <img
+              src="/image.png"
+              alt="SRK Hospital — Superspeciality Hospital"
+              className="nav-logo-img"
+            />
+          </Link>
 
             {/* TAGLINE */}
             <p style={{
@@ -319,7 +287,7 @@ export default function Footer() {
             </p>
 
             {/* NEWSLETTER */}
-            <div style={{ flexShrink: 0, width: "clamp(240px,28vw,310px)" }}>
+            {/* <div style={{ flexShrink: 0, width: "clamp(240px,28vw,310px)" }}>
               <p style={{
                 fontSize: "9.5px", textTransform: "uppercase", letterSpacing: "1.8px",
                 color: T.muted, fontWeight: 500, margin: "0 0 10px",
@@ -378,7 +346,7 @@ export default function Footer() {
                   </button>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -407,8 +375,9 @@ export default function Footer() {
                   {[
                     { t: "M.B.B.S", hi: false },
                     { t: "M.S.",    hi: false },
-                    { t: "M.Ch.",   hi: true  },
                     { t: "DNB",     hi: false },
+                    { t: "M.Ch.",   hi: true  },
+                    
                     { t: "🥇 Gold Medallist", hi: false, gold: true },
                   ].map(({ t, hi, gold }, i) => (
                     <span key={i} style={{
@@ -490,7 +459,7 @@ export default function Footer() {
                 <p style={{ fontSize: "9.5px", textTransform: "uppercase", letterSpacing: "1.8px", color: T.teal, fontWeight: 700, margin: "0 0 18px" }}>Services</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "13px" }}>
                   {SERVICES.map((s, i) => (
-                    <FootLink key={i} to="/areas-of-expertise" delay={0.22 + i * 0.055}>{s}</FootLink>
+                    <FootLink key={i} to={`/areas-of-expertise?specialty=${i + 1}`} delay={0.22 + i * 0.055}>{s}</FootLink>
                   ))}
                 </div>
               </div>
@@ -500,33 +469,61 @@ export default function Footer() {
                 <p style={{ fontSize: "9.5px", textTransform: "uppercase", letterSpacing: "1.8px", color: T.teal, fontWeight: 700, margin: "0 0 18px" }}>Contact</p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "22px" }}>
-                  {CONTACT.map((c, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      {/* icon container — same look as navbar phone-icon */}
-                      <div style={{
-                        width: "28px", height: "28px", borderRadius: "8px", flexShrink: 0,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        background: T.dimW,
-                        border: "1px solid rgba(44,206,209,0.16)",
-                        color: T.teal, marginTop: "1px",
-                      }}>
-                        {c.icon}
-                      </div>
-                      <span style={{
-                        fontSize: "12px", fontWeight: 400,
-                        color: T.muted, lineHeight: 1.65,
-                        fontFamily: "'DM Sans', system-ui, sans-serif",
-                        whiteSpace: "pre-line",
-                      }}>
-                        {c.text}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+  {CONTACT.map((c, i) => (
+    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+      
+      {/* icon container */}
+      <div style={{
+        width: "28px", height: "28px", borderRadius: "8px", flexShrink: 0,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        background: T.dimW,
+        border: "1px solid rgba(44,206,209,0.16)",
+        color: T.teal, marginTop: "1px",
+      }}>
+        {c.icon}
+      </div>
+
+      {/* text / link */}
+      {c.link ? (
+        <a
+          href={c.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            fontSize: "12px",
+            fontWeight: 400,
+            color: T.muted,
+            lineHeight: 1.65,
+            fontFamily: "'DM Sans', system-ui, sans-serif",
+            textDecoration: "none",
+            whiteSpace: "pre-line",
+            transition: "color 0.2s ease",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = T.teal)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = T.muted)}
+        >
+          {c.text}
+        </a>
+      ) : (
+        <span
+          style={{
+            fontSize: "12px",
+            fontWeight: 400,
+            color: T.muted,
+            lineHeight: 1.65,
+            fontFamily: "'DM Sans', system-ui, sans-serif",
+            whiteSpace: "pre-line",
+          }}
+        >
+          {c.text}
+        </span>
+      )}
+    </div>
+  ))}
+</div>
 
                 {/* CTA — mirrors navbar btn-book exactly */}
-                <Link
-                  to="/medical-services"
+                 <a href="tel:+919887711224"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: "8px",
                     padding: "10px 22px",
@@ -560,7 +557,7 @@ export default function Footer() {
                     animation: "ft2-pulse 2s ease-in-out infinite",
                   }}/>
                   <span>Book Consultation</span>
-                </Link>
+                </a>
               </div>
 
             </div>

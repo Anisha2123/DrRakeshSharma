@@ -360,7 +360,7 @@ export default function WhyChooseDrSharma() {
                 maxWidth: "340px", fontSize: "0.9rem", lineHeight: 1.85,
                 color: T.mid, fontWeight: 300, margin: 0,
               }}>
-                A physician who treats the person, not just the condition — combining clinical mastery with genuine compassion for life-changing outcomes.
+                A surgeon who treats the person, not just the condition — combining clinical mastery with genuine compassion for life-changing outcomes.
               </p>
             </div>
 
@@ -517,9 +517,9 @@ export default function WhyChooseDrSharma() {
               <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.2rem,2.5vw,1.6rem)", fontWeight: 700, color: T.white, margin: 0, lineHeight: 1.2 }}>
                 Ready to take the next step?
               </p>
-              <p style={{ fontFamily: "'DM Sans', system-ui, sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", margin: "5px 0 0", fontWeight: 300 }}>
+              <a href="tel:+919887711224" style={{ fontFamily: "'DM Sans', system-ui, sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", margin: "5px 0 0", fontWeight: 300 }}>
                 Book a consultation with Dr. Sharma today.
-              </p>
+              </a>
             </div>
 
             <div style={{ display: "flex", gap: "10px", position: "relative", flexShrink: 0 }}>
@@ -537,7 +537,7 @@ export default function WhyChooseDrSharma() {
               >
                 Book Appointment →
               </button>
-              <button
+              {/* <button
                 style={{
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                   fontSize: "0.84rem", fontWeight: 600, letterSpacing: "0.05em",
@@ -550,7 +550,7 @@ export default function WhyChooseDrSharma() {
                 onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(255,255,255,0.18)"; b.style.color = "rgba(255,255,255,0.7)"; }}
               >
                 Learn More
-              </button>
+              </button> */}
             </div>
           </div>
 

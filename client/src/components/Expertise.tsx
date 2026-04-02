@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 
 /* ─── DATA ─────────────────────────────────────────────────── */
 const specialties = [
@@ -343,7 +344,7 @@ function Modal({
           </ul>
 
           {/* CTA */}
-          <button style={{
+          <a href="tel:+919887711224" style={{
             marginTop: "28px", width: "100%",
             padding: "14px", borderRadius: "14px", border: "none",
             background: item.color, color: "#fff",
@@ -356,7 +357,7 @@ function Modal({
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)"; }}
           >
             Book a Consultation
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -382,6 +383,7 @@ function SpecialtyCard({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      data-specialty-id={item.id}
       className={`specialty-card ${visible ? "card-visible" : ""}`}
       style={{
         animationDelay: `${0.1 + index * 0.09}s`,
@@ -537,6 +539,7 @@ export default function AreasOfExpertise() {
   const [visible, setVisible] = useState(false);
   const [activeModal, setActiveModal] = useState<(typeof specialties)[0] | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -546,6 +549,24 @@ export default function AreasOfExpertise() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  // Handle specialty parameter from URL
+  useEffect(() => {
+    const specialtyId = searchParams.get("specialty");
+    if (specialtyId) {
+      const specialty = specialties.find(s => s.id === parseInt(specialtyId));
+      if (specialty) {
+        setActiveModal(specialty);
+        // Scroll to the card
+        setTimeout(() => {
+          const cardElement = document.querySelector(`[data-specialty-id="${specialtyId}"]`);
+          if (cardElement) {
+            cardElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 100);
+      }
+    }
+  }, [searchParams]);
 
   return (
     <>
@@ -754,7 +775,7 @@ export default function AreasOfExpertise() {
                 Book a general consultation — Dr. Sharma will guide you to the right treatment path.
               </p>
             </div>
-            <button style={{
+             <a href="tel:+919887711224" style={{
               padding: "13px 28px", borderRadius: "14px", border: "none",
               background: "var(--dark)", color: "#fff",
               fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
@@ -776,7 +797,7 @@ export default function AreasOfExpertise() {
               }}
             >
               Book Consultation →
-            </button>
+            </a>
           </div>
         </div>
       </section>

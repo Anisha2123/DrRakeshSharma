@@ -299,7 +299,7 @@ export default function DrRakeshSharmaProfile() {
                 }}>
                   Dr. Rakesh<br />
                   <span style={{ color: T.orange, fontStyle: "italic" }}>Sharma</span>
-                  <span style={{ color: T.teal, fontSize: "0.55em", verticalAlign: "super", fontStyle: "normal", letterSpacing: "-1px", marginLeft: "4px" }}>M.Ch.</span>
+                  {/* <span style={{ color: T.teal, fontSize: "0.55em", verticalAlign: "super", fontStyle: "normal", letterSpacing: "-1px", marginLeft: "4px" }}>M.Ch.</span> */}
                 </h1>
               </div>
 
@@ -398,22 +398,22 @@ export default function DrRakeshSharmaProfile() {
 
               {/* — CTA row — */}
               <div style={{ display: "flex", gap: "10px" }}>
-                <button
+                 <a href="tel:+919887711224"
                   className="drs-cta-btn"
                   style={{ flex: 1, background: T.orange, color: T.white, boxShadow: `0 8px 32px ${T.orange}40` }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "#e8703e"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = T.orange; }}
                 >
                   Book Appointment
-                </button>
-                <button
+                </a>
+                {/* <button
                   className="drs-cta-btn"
                   style={{ padding: "13px 22px", background: T.white, color: T.ink, border: `1px solid ${T.border}` }}
                   onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = T.orange; b.style.color = T.orange; }}
                   onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = T.border; b.style.color = T.ink; }}
                 >
                   Learn More
-                </button>
+                </button> */}
               </div>
 
             </div>

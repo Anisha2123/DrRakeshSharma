@@ -303,6 +303,110 @@ const SERVICES: Service[] = [
     ],
     recovery: ["2–3 weeks post-surgery full recovery"],
   },
+  {
+  id: 16,
+  title: "Uro Oncology",
+  short: "Comprehensive cancer care for urinary and reproductive organs.",
+  category: "Oncology", catColor: "#E05A5A",
+  img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 3v18M5 12h14" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Blood in urine", "Persistent urinary symptoms", "Detected tumors in urinary organs"],
+  symptoms: ["Pain during urination", "Frequent urination", "Unexplained weight loss"],
+  diagnosis: ["CT scan", "MRI", "Biopsy", "Blood tests"],
+  treatments: [
+    { label: "Surgery", desc: "Tumor removal procedures including prostate, bladder, kidney surgeries." },
+    { label: "Chemotherapy / Immunotherapy", desc: "Advanced cancer treatment depending on stage." },
+    { label: "Radiation Therapy", desc: "Targeted therapy to destroy cancer cells." },
+  ],
+  recovery: ["1–2 weeks (minor)", "2–6 weeks (moderate)", "4–8 weeks (major surgeries)"],
+},
+
+{
+  id: 17,
+  title: "Kidney Transplantation",
+  short: "Advanced kidney replacement surgery with expert post-care.",
+  category: "Transplant", catColor: "#6B7FD4",
+  img: "https://images.unsplash.com/photo-1580281657527-47b5b9c6c4a1?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 21s7-5 7-11a7 7 0 10-14 0c0 6 7 11 7 11z" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Kidney failure", "Chronic kidney disease (advanced stage)"],
+  symptoms: ["Fatigue", "Swelling", "Reduced urine output"],
+  diagnosis: ["Blood tests", "Compatibility tests", "Imaging"],
+  treatments: [
+    { label: "Transplant Surgery", desc: "Healthy kidney placed in lower abdomen." },
+    { label: "Post-Transplant Care", desc: "Immunosuppressants and monitoring." },
+  ],
+  recovery: ["5–10 days hospital stay", "2–4 weeks initial recovery", "6–8 weeks full recovery"],
+},
+
+{
+  id: 18,
+  title: "Urethroplasty & Urethral Stenting",
+  short: "Reconstruction and widening of narrowed urethra.",
+  category: "Reconstructive", catColor: T.orange,
+  img: "https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 12h16" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Difficulty passing urine", "Urethral blockage"],
+  symptoms: ["Weak urine flow", "Pain during urination"],
+  diagnosis: ["Uroflowmetry", "Cystoscopy", "Imaging"],
+  treatments: [
+    { label: "Urethroplasty", desc: "Surgical reconstruction of urethra." },
+    { label: "Urethral Stenting", desc: "Placement of stent to keep passage open." },
+  ],
+  recovery: ["2–4 days hospital stay", "3–6 weeks full recovery"],
+},
+
+{
+  id: 19,
+  title: "Female Urology",
+  short: "Specialized care for urinary and pelvic conditions in women.",
+  category: "General Urology", catColor: T.orange,
+  img: "https://images.unsplash.com/photo-1580281657527-47b5b9c6c4a1?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="10" r="4" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Frequent urination", "Urine leakage", "Pelvic discomfort"],
+  symptoms: ["Burning urination", "Urgency", "Lower abdominal pain"],
+  diagnosis: ["Urine test", "Ultrasound", "Pelvic exam"],
+  treatments: [
+    { label: "Medication", desc: "For infections and bladder control." },
+    { label: "Therapy", desc: "Pelvic floor strengthening." },
+    { label: "Surgery", desc: "For severe prolapse or incontinence." },
+  ],
+  recovery: ["2–4 days (minor)", "4–6 weeks (surgical cases)"],
+},
+
+{
+  id: 20,
+  title: "Pediatric Urology",
+  short: "Expert care for urinary and genital issues in children.",
+  category: "Specialized", catColor: "#6B7FD4",
+  img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Birth defects", "Urinary infections in children", "Bedwetting"],
+  symptoms: ["Pain during urination", "Swelling", "Frequent infections"],
+  diagnosis: ["Ultrasound", "Urine test", "Special pediatric tests"],
+  treatments: [
+    { label: "Medication", desc: "For infections and mild conditions." },
+    { label: "Minimally Invasive Procedures", desc: "Child-safe surgical solutions." },
+    { label: "Surgery", desc: "For congenital abnormalities." },
+  ],
+  recovery: ["Few days (minor)", "2–4 days (minimally invasive)", "3–4 weeks (surgery)"],
+},
+
+{
+  id: 21,
+  title: "Laparoscopy",
+  short: "Minimally invasive surgery with faster recovery and less pain.",
+  category: "Minimally Invasive", catColor: T.teal,
+  img: "https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=800&q=80&auto=format&fit=crop",
+  icon: <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  when: ["Kidney issues", "Bladder conditions", "Ureter problems"],
+  symptoms: ["Pain", "Organ dysfunction"],
+  diagnosis: ["CT scan", "Ultrasound", "Blood tests"],
+  treatments: [
+    { label: "Minimally Invasive Surgery", desc: "Small incisions with camera-guided tools." },
+    { label: "Advanced Procedures", desc: "Used for kidney, bladder, and abdominal surgeries." },
+  ],
+  recovery: ["Same day or 1–2 days discharge", "3–7 days basic recovery", "2–3 weeks full recovery"],
+},
 ];
 
 const CATEGORIES = ["All", "Stone Disease", "Prostate", "Oncology", "Andrology", "Minimally Invasive", "General Urology"];
@@ -395,7 +499,7 @@ function Modal({ svc, onClose }: { svc: Service | null; onClose: () => void }) {
               ))}
             </div>
           </div>
-          <a href="/medical-services" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "18px", padding: "13px", borderRadius: "14px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", boxShadow: "0 6px 20px rgba(44,206,209,0.3)" }}>
+           <a href="tel:+919887711224" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "18px", padding: "13px", borderRadius: "14px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", boxShadow: "0 6px 20px rgba(44,206,209,0.3)" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
             Book Consultation
           </a>
@@ -657,7 +761,7 @@ export default function MedicalServices() {
               <p style={{ fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: "clamp(1.2rem,2.8vw,1.7rem)", fontWeight: 700, color: T.white, margin: 0, lineHeight: 1.2 }}>Not sure which service you need?</p>
               <p style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.83rem", color: "rgba(255,255,255,0.42)", margin: "5px 0 0", fontWeight: 300 }}>Book a general consultation — Dr. Sharma will guide you to the right treatment.</p>
             </div>
-            <a href="/medical-services" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)", transition: "all 0.22s cubic-bezier(.34,1.56,.64,1)", position: "relative", flexShrink: 0 }}
+             <a href="tel:+919887711224" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)", transition: "all 0.22s cubic-bezier(.34,1.56,.64,1)", position: "relative", flexShrink: 0 }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 28px rgba(44,206,209,0.44)"; el.style.background = "linear-gradient(135deg,#FF8A5B,#e06030)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 16px rgba(44,206,209,0.34)"; el.style.background = "linear-gradient(135deg,#2CCED1,#1ab8bb)"; }}
             >

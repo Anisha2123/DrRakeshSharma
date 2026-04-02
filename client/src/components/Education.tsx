@@ -405,6 +405,437 @@ function RoleRow({ r, idx, visible, onClick }: { r: Role; idx: number; visible: 
   );
 }
 
+/* ─── CERTIFICATES DATA ──────────────────────────────────────── */
+const CERTS = [
+  {
+    id: 1,
+    src: "/certifications/c1.jpg.jpeg",
+    label: "University Gold Medal",
+    sub: "M.Ch. Urology · 2015",
+    issuer: "West Bengal University of Health Sciences",
+    tag: "🥇 Gold Medal",
+    tagColor: C.gold,
+    accent: C.gold,
+    year: "2015",
+    detail: "Awarded the prestigious University Gold Medal for securing the highest position in the M.Ch. Urology examination — The West Bengal University of Health Sciences, 2015.",
+  },
+  {
+    id: 2,
+    src: "/certifications/c2.jpg.jpeg",
+    label: "Certificate of Registration",
+    sub: "Rajasthan Medical Council · 2017",
+    issuer: "Rajasthan Medical Council, Jaipur",
+    tag: "RMC Registered",
+    tagColor: C.teal,
+    accent: C.teal,
+    year: "2017",
+    detail: "Official medical registration with the Rajasthan Medical Council confirming qualification M.Ch. (Urology) from P.G. Kar Medical College, Kolkata — West Bengal University of Health Sciences.",
+  },
+  {
+    id: 3,
+    src: "/certifications/c3.jpg.jpeg",
+    label: "Degree Certificate — M.Ch.",
+    sub: "Master of Chirurgie · Urology",
+    issuer: "West Bengal University of Health Sciences",
+    tag: "Super-Specialist",
+    tagColor: C.orange,
+    accent: C.orange,
+    year: "2016",
+    detail: "Official degree certificate confirming Rakesh Sharma obtained the degree of Master of Chirurgie (M.Ch.) in Urology from The West Bengal University of Health Sciences in the year 2015.",
+  },
+];
+
+/* ─── CERT LIGHTBOX ──────────────────────────────────────────── */
+function CertLightbox({ cert, onClose, onPrev, onNext }: {
+  cert: typeof CERTS[0] | null;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const [show, setShow] = useState(false);
+  const closing = useRef(false);
+
+  /* animate in when cert arrives */
+  useEffect(() => {
+    if (cert) {
+      closing.current = false;
+      document.body.style.overflow = "hidden";
+      setTimeout(() => setShow(true), 10);
+    }
+  }, [cert]);
+
+  /* animated close — sets show=false, waits, then calls onClose */
+  const close = useCallback(() => {
+    if (closing.current) return;
+    closing.current = true;
+    setShow(false);
+    setTimeout(() => {
+      onClose();
+      closing.current = false;
+    }, 400);
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!cert) { document.body.style.overflow = ""; }
+  }, [cert]);
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === "Escape")      close();
+      if (e.key === "ArrowRight")  onNext();
+      if (e.key === "ArrowLeft")   onPrev();
+    };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, [close, onNext, onPrev]);
+
+  if (!cert) return null;
+
+  const btnBase: React.CSSProperties = {
+    width: "40px", height: "40px", borderRadius: "50%",
+    background: "rgba(0,0,0,0.60)", backdropFilter: "blur(8px)",
+    border: "1.5px solid rgba(255,255,255,0.25)",
+    color: "#fff", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    fontSize: "1rem", fontWeight: 400,
+    transition: "background 0.22s, transform 0.22s, border-color 0.22s",
+    position: "absolute", zIndex: 3,
+  };
+
+  return (
+    <div
+      onClick={e => e.target === e.currentTarget && close()}
+      style={{
+        position: "fixed", inset: 0, zIndex: 10000,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "20px",
+        background: show ? "rgba(0,0,0,0.90)" : "rgba(0,0,0,0)",
+        backdropFilter: show ? "blur(16px)" : "blur(0px)",
+        transition: "all 0.38s cubic-bezier(0.22,1,0.36,1)",
+      }}
+    >
+      <div style={{
+        width: "100%", maxWidth: "820px",
+        display: "flex", flexDirection: "column",
+        opacity: show ? 1 : 0,
+        transform: show ? "scale(1) translateY(0)" : "scale(0.93) translateY(28px)",
+        transition: "all 0.44s cubic-bezier(0.22,1,0.36,1)",
+      }}>
+
+        {/* ── TOP META BAR ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+          <span style={{
+            fontFamily: "'DM Sans',sans-serif",
+            fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+            padding: "4px 12px", borderRadius: "100px",
+            background: `${cert.accent}22`, color: cert.accent,
+            border: `1px solid ${cert.accent}40`,
+          }}>{cert.tag}</span>
+          <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>{cert.issuer}</span>
+
+          {/* dot nav in top bar */}
+          <div style={{ marginLeft: "auto", display: "flex", gap: "6px", alignItems: "center" }}>
+            {CERTS.map(c => (
+              <div key={c.id} style={{
+                width: c.id === cert.id ? "18px" : "6px", height: "6px", borderRadius: "3px",
+                background: c.id === cert.id ? cert.accent : "rgba(255,255,255,0.25)",
+                transition: "all 0.3s",
+              }} />
+            ))}
+          </div>
+        </div>
+
+        {/* ── IMAGE AREA ── */}
+        <div style={{ borderRadius: "18px", overflow: "hidden", background: "#111", position: "relative" }}>
+          <img
+            src={cert.src}
+            alt={cert.label}
+            style={{ width: "100%", maxHeight: "68vh", objectFit: "contain", display: "block" }}
+          />
+
+          {/* ✕ CLOSE — top-right, big and obvious */}
+          <button
+            onClick={close}
+            aria-label="Close"
+            style={{ ...btnBase, top: "14px", right: "14px",
+              background: "rgba(200,40,40,0.75)", borderColor: "rgba(255,120,120,0.4)",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(220,40,40,0.95)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.12)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,40,40,0.75)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+            }}
+          >
+            <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+              <path d="M2 2l10 10M12 2L2 12" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+
+          {/* ← PREV — left mid */}
+          <button
+            onClick={onPrev}
+            aria-label="Previous"
+            style={{ ...btnBase, left: "14px", top: "50%", transform: "translateY(-50%)" }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(44,206,209,0.65)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.60)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1)";
+            }}
+          >
+            <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+              <path d="M9 2L4 7l5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+
+          {/* → NEXT — right mid */}
+          <button
+            onClick={onNext}
+            aria-label="Next"
+            style={{ ...btnBase, right: "14px", top: "50%", transform: "translateY(-50%)" }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(44,206,209,0.65)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.60)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1)";
+            }}
+          >
+            <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+              <path d="M5 2l5 5-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* ── CAPTION + CLOSE PILL ── */}
+        <div style={{
+          marginTop: "12px", padding: "15px 18px",
+          borderRadius: "14px",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          display: "flex", alignItems: "center", gap: "16px",
+        }}>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", color: "#fff", fontSize: "1.1rem", fontWeight: 700, margin: "0 0 3px", lineHeight: 1.2 }}>{cert.label}</h3>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", color: "rgba(255,255,255,0.45)", fontSize: "0.78rem", margin: "0 0 5px", fontWeight: 300, lineHeight: 1.6 }}>{cert.detail}</p>
+            <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.62rem", color: cert.accent, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em" }}>{cert.sub}</span>
+          </div>
+
+          {/* prominent CLOSE button in caption */}
+          <button
+            onClick={close}
+            aria-label="Close"
+            style={{
+              flexShrink: 0,
+              display: "flex", alignItems: "center", gap: "8px",
+              padding: "10px 22px", borderRadius: "100px",
+              background: "rgba(200,40,40,0.18)",
+              border: "1.5px solid rgba(220,60,60,0.45)",
+              color: "#ff8a8a",
+              fontFamily: "'DM Sans',sans-serif",
+              fontSize: "0.8rem", fontWeight: 700,
+              letterSpacing: "0.06em", cursor: "pointer",
+              transition: "all 0.25s cubic-bezier(0.22,1,0.36,1)",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={e => {
+              const b = e.currentTarget as HTMLButtonElement;
+              b.style.background = "rgba(220,40,40,0.85)";
+              b.style.borderColor = "rgba(255,100,100,0.6)";
+              b.style.color = "#fff";
+              b.style.transform = "scale(1.04)";
+            }}
+            onMouseLeave={e => {
+              const b = e.currentTarget as HTMLButtonElement;
+              b.style.background = "rgba(200,40,40,0.18)";
+              b.style.borderColor = "rgba(220,60,60,0.45)";
+              b.style.color = "#ff8a8a";
+              b.style.transform = "scale(1)";
+            }}
+          >
+            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+              <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+            Close
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+/* ─── CERTIFICATES GALLERY ───────────────────────────────────── */
+function CertificatesGallery({ visible }: { visible: boolean }) {
+  const [activeCert, setActiveCert] = useState<number | null>(null);
+  const openCert = (id: number) => setActiveCert(id);
+  const closeCert = () => setActiveCert(null);
+  const prevCert = useCallback(() =>
+    setActiveCert(id => id !== null ? ((CERTS.findIndex(c => c.id === id) - 1 + CERTS.length) % CERTS.length) + 1 : null), []);
+  const nextCert = useCallback(() =>
+    setActiveCert(id => id !== null ? ((CERTS.findIndex(c => c.id === id) + 1) % CERTS.length) + 1 : null), []);
+
+  const activeCertData = activeCert !== null ? CERTS.find(c => c.id === activeCert) ?? null : null;
+
+  return (
+    <>
+      <style>{`
+        @keyframes eq-certIn { from{opacity:0;transform:translateY(28px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+        .eq-cert-card { opacity:0; transform:translateY(28px) scale(0.96); }
+        .eq-cert-show { animation: eq-certIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+        .eq-cert-card:hover .eq-cert-img { transform: scale(1.05); filter: brightness(0.75) saturate(1.1); }
+        .eq-cert-card:hover .eq-cert-overlay { opacity: 1; }
+        .eq-cert-card:hover .eq-cert-zoom { opacity: 1; transform: scale(1.08) rotate(-6deg); }
+        .eq-cert-img { transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.45s ease; filter: brightness(0.88) saturate(0.9); }
+        .eq-cert-overlay { position:absolute; inset:0; background: rgba(0,0,0,0.35); opacity:0; transition: opacity 0.35s ease; display:flex; align-items:center; justify-content:center; }
+        .eq-cert-zoom { opacity:0; transform:scale(1) rotate(0); transition: all 0.38s cubic-bezier(0.34,1.56,0.64,1); }
+      `}</style>
+
+      {/* section header */}
+      <div style={{ marginBottom: "clamp(1.5rem,3vw,2.5rem)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+          <span style={{ width: "28px", height: "2px", background: C.gold, borderRadius: "2px", display: "inline-block" }} />
+          <span style={{ fontSize: "0.66rem", textTransform: "uppercase", letterSpacing: "0.32em", color: C.gold, fontWeight: 600 }}>Official Credentials</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.6rem,3.5vw,2.4rem)", fontWeight: 700, color: C.dark, margin: 0, letterSpacing: "-1px", lineHeight: 1.05 }}>
+            Certificates &{" "}
+            <em style={{ color: C.gold, fontStyle: "italic" }}>Credentials</em>
+          </h3>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.82rem", color: C.muted, fontWeight: 300, margin: 0, maxWidth: "320px" }}>
+            Click any certificate to view the full document
+          </p>
+        </div>
+        <div style={{ marginTop: "20px", height: "1.5px", background: "rgba(0,0,0,0.07)", overflow: "hidden", borderRadius: "2px" }}>
+          <div style={{ height: "100%", background: `linear-gradient(90deg,${C.gold},${C.orange},transparent)`, width: visible ? "100%" : "0%", transition: "width 1.1s cubic-bezier(0.22,1,0.36,1) 0.15s" }} />
+        </div>
+      </div>
+
+      {/* 3-card grid */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "clamp(12px,2vw,20px)",
+        marginBottom: "clamp(3rem,6vw,5rem)",
+      }}>
+        {CERTS.map((cert, i) => (
+          <div
+            key={cert.id}
+            onClick={() => openCert(cert.id)}
+            className={`eq-cert-card ${visible ? "eq-cert-show" : ""}`}
+            style={{
+              animationDelay: `${i * 0.1 + 0.12}s`,
+              cursor: "pointer",
+              borderRadius: "18px",
+              overflow: "hidden",
+              background: C.white,
+              border: `1px solid ${C.border}`,
+              boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+              display: "flex", flexDirection: "column",
+              transition: "border-color 0.35s, box-shadow 0.35s, transform 0.38s cubic-bezier(0.22,1,0.36,1)",
+            }}
+            onMouseEnter={e => {
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.borderColor = `${cert.accent}55`;
+              el.style.boxShadow = `0 18px 50px ${cert.accent}18`;
+              el.style.transform = "translateY(-8px) scale(1.012)";
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.borderColor = C.border;
+              el.style.boxShadow = "0 2px 16px rgba(0,0,0,0.06)";
+              el.style.transform = "translateY(0) scale(1)";
+            }}
+          >
+            {/* image area */}
+            <div style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0, background: "#f0ede8" }}>
+              <img
+                src={cert.src}
+                alt={cert.label}
+                className="eq-cert-img"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
+              />
+              {/* gradient */}
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.3) 100%)" }} />
+              {/* top accent bar */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2.5px", background: `linear-gradient(90deg, ${cert.accent}, ${cert.accent}80)` }} />
+              {/* tag */}
+              <span style={{
+                position: "absolute", top: "12px", right: "12px",
+                fontFamily: "'DM Sans',sans-serif",
+                fontSize: "0.57rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
+                padding: "3px 9px", borderRadius: "100px",
+                background: "rgba(255,255,255,0.92)", backdropFilter: "blur(6px)",
+                color: cert.accent, border: `1px solid ${cert.accent}35`,
+              }}>{cert.tag}</span>
+              {/* year */}
+              <span style={{
+                position: "absolute", bottom: "10px", left: "12px",
+                fontFamily: "'Cormorant Garamond',serif",
+                fontSize: "0.78rem", fontStyle: "italic", color: "rgba(255,255,255,0.7)",
+              }}>{cert.year}</span>
+              {/* hover overlay with zoom icon */}
+              <div className="eq-cert-overlay">
+                <div className="eq-cert-zoom" style={{
+                  width: "44px", height: "44px", borderRadius: "50%",
+                  background: `linear-gradient(135deg,${C.teal},${C.orange})`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+                }}>
+                  <svg viewBox="0 0 18 18" fill="none" width="16" height="16">
+                    <circle cx="8" cy="8" r="5.5" stroke="white" strokeWidth="1.5"/>
+                    <path d="M12 12l4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M8 5.5v5M5.5 8h5" stroke="white" strokeWidth="1.3" strokeLinecap="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* body */}
+            <div style={{ padding: "15px 17px 17px", flex: 1, display: "flex", flexDirection: "column" }}>
+              <h4 style={{
+                fontFamily: "'Cormorant Garamond',serif",
+                fontSize: "1.05rem", fontWeight: 700,
+                color: C.ink, margin: "0 0 5px", lineHeight: 1.25,
+              }}>{cert.label}</h4>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.72rem", color: cert.accent, fontWeight: 600, margin: "0 0 5px" }}>{cert.sub}</p>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.7rem", color: C.muted, margin: "0 0 12px", fontWeight: 300, lineHeight: 1.5, flex: 1 }}>{cert.issuer}</p>
+              {/* footer */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: `1px solid ${C.border}` }}>
+                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "0.68rem", fontWeight: 600, color: cert.accent }}>View Certificate</span>
+                <div style={{
+                  width: "26px", height: "26px", borderRadius: "50%",
+                  background: `${cert.accent}12`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  transition: "transform 0.3s",
+                }}>
+                  <svg viewBox="0 0 10 10" fill="none" width="9" height="9">
+                    <path d="M2 5h6M5 2l3 3-3 3" stroke={cert.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* lightbox */}
+      <CertLightbox
+        cert={activeCertData}
+        onClose={closeCert}
+        onPrev={prevCert}
+        onNext={nextCert}
+      />
+    </>
+  );
+}
+
 /* ─── MAIN ───────────────────────────────────────────────────── */
 export default function EducationalQualification() {
   const [visible, setVisible] = useState(false);
@@ -545,11 +976,14 @@ export default function EducationalQualification() {
           </div>
 
           {/* ══ SCROLL HINT dots ══ */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "16px", marginBottom: "clamp(3.5rem,7vw,6rem)" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "16px", marginBottom: "clamp(2.5rem,5vw,4rem)" }}>
             {degrees.map((_, i) => (
               <div key={i} style={{ width: i === 0 ? "20px" : "6px", height: "6px", borderRadius: "3px", background: i === 0 ? C.orange : "rgba(0,0,0,0.12)", transition: "all 0.3s" }} />
             ))}
           </div>
+
+          {/* ══ CERTIFICATES GALLERY ══ */}
+          <CertificatesGallery visible={visible} />
 
           {/* ══ EXPERTISE SECTION ══ */}
           <div className="exp-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(2rem,5vw,5rem)", alignItems: "stretch" }}>

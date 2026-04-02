@@ -1,12 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import WhyChooseDrSharma from "./pages/WhyChoose";
+import About from "./pages/AboutUs";
 import AreasOfExpertise from "./components/Expertise";
 // import About from "../pages/About";
 import Services from "./pages/Services";
+import ServiceDetail from "./pages/ServiceDetail";
 import Navbar from "./components/Navabar";
 import Footer from "./components/Footer";
+import BlogSection from "./pages/Blogs";
+import BlogDetailPage from "./pages/BlogsDetailPage";
 // import Facilities from "./pages/Facilities";
 // import Contact from "./pages/Contact";
 // import NotFound from "./pages/NotFound";
@@ -19,9 +22,14 @@ function App() {
 
         {/* Main Pages */}
         <Route path="/" element={<Home />} />
-        <Route path="/why-choose-DrRakeshSharma" element={<WhyChooseDrSharma />} />
+        <Route path="/why-choose-DrRakeshSharma" element={<About />} />
         <Route path="/areas-of-expertise" element={<AreasOfExpertise />} />
         <Route path="/medical-services" element={<Services />} />
+        <Route path="/medical-services/:serviceId" element={<ServiceDetail />} />
+             <Route path="/our-blogs" element={<BlogSection />} />
+             
+        <Route path="/blog/:slug"       element={<BlogDetailPage />} />
+
         {/* <Route path="/about-srk-hospital" element={<About />} />
         <Route path="/medical-services" element={<Services />} />
         <Route path="/hospital-facilities" element={<Facilities />} />
