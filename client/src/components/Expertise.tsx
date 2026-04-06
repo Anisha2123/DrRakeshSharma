@@ -345,7 +345,7 @@ function Modal({
           </ul>
 
           {/* CTA */}
-          <a href="tel:+919773332601" style={{
+          <a href="tel:+919887711224" style={{
             marginTop: "28px", width: "100%",
             padding: "14px", borderRadius: "14px", border: "none",
             background: item.color, color: "#fff",
@@ -776,7 +776,7 @@ export default function AreasOfExpertise() {
                 Book a general consultation — Dr. Sharma will guide you to the right treatment path.
               </p>
             </div>
-             <a href="tel:+919773332601" style={{
+             <a href="tel:+919887711224" style={{
               padding: "13px 28px", borderRadius: "14px", border: "none",
               background: "var(--dark)", color: "#fff",
               fontFamily: "'DM Sans', sans-serif", fontWeight: 600,

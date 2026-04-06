@@ -383,7 +383,7 @@ export default function WhyChooseDrSharma() {
             <div style={{ position: "absolute", top: 0, left: "32px", width: "48px", height: "2px", background: T.orange, borderRadius: "0 0 2px 2px" }} />
             <div style={{ position: "relative" }}>
               <p style={{ fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: "clamp(1.2rem,2.5vw,1.6rem)", fontWeight: 700, color: T.white, margin: 0, lineHeight: 1.2 }}>Ready to take the next step?</p>
-              <a href="tel:+919773332601" style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", margin: "5px 0 0", fontWeight: 300 }}>Book a consultation with Dr. Sharma today.</a>
+              <a href="tel:+919887711224" style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", margin: "5px 0 0", fontWeight: 300 }}>Book a consultation with Dr. Sharma today.</a>
             </div>
             <div style={{ display: "flex", gap: "10px", position: "relative", flexShrink: 0 }}>
               <button

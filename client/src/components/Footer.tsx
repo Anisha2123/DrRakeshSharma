@@ -59,8 +59,8 @@ const CONTACT = [
         <path d="M3.5 4A1.5 1.5 0 015 2.5h1.5a1 1 0 011 .8l.7 3.4a1 1 0 01-.3.95l-.9.9a11 11 0 005.5 5.5l.9-.9a1 1 0 01.95-.3l3.4.7a1 1 0 01.8 1V16a1.5 1.5 0 01-1.5 1.5C8.02 17.5 2.5 11.98 2.5 5A1.5 1.5 0 014 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    text: "+91 9773332601",
-    link: "tel:+919773332601",
+    text: "+91 9887711224",
+    link: "tel:+919887711224",
   },
   {
     icon: (
@@ -523,7 +523,7 @@ export default function Footer() {
 </div>
 
                 {/* CTA — mirrors navbar btn-book exactly */}
-                 <a href="tel:+919773332601"
+                 <a href="tel:+919887711224"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: "8px",
                     padding: "10px 22px",
