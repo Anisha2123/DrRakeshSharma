@@ -398,7 +398,7 @@ export default function DrRakeshSharmaProfile() {
 
               {/* — CTA row — */}
               <div style={{ display: "flex", gap: "10px" }}>
-                 <a href="tel:+919887711224"
+                 <a href="tel:+919773332601"
                   className="drs-cta-btn"
                   style={{ flex: 1, background: T.orange, color: T.white, boxShadow: `0 8px 32px ${T.orange}40` }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "#e8703e"; }}

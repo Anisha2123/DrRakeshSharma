@@ -690,7 +690,7 @@ export default function ServiceDetail() {
             }}>
               Our specialists are here to help. Book an appointment today.
             </p>
-             <a href="tel:+919887711224" style={{
+             <a href="tel:+919773332601" style={{
               padding: "12px 32px", borderRadius: "100px",
               background: `linear-gradient(135deg, ${service.catColor}, ${service.catColor}dd)`,
               color: T.white, border: "none", cursor: "pointer",

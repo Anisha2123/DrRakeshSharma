@@ -821,7 +821,7 @@ export default function HeroSection() {
             </div>
 
             <div className={`srk-cta ${o}`}>
-              <a href="tel:+919887711224" className="btn-b"><span>Book Appointment</span></a>
+              <a href="tel:+919773332601" className="btn-b"><span>Book Appointment</span></a>
               <a href="/medical-services" className="btn-s">
                 Services
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
