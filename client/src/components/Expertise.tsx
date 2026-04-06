@@ -11,8 +11,7 @@ const specialties = [
     title: "Urological Care",
     subtitle: "Comprehensive evaluation & treatment",
     tag: "Foundation",
-    image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=900&q=80&auto=format&fit=crop",
-    color: "#FF8A5B",
+    image: "/area of expertise/1.png",
     accent: "rgba(255,138,91,0.12)",
     icon: (
       <svg viewBox="0 0 32 32" fill="none" width="26" height="26">
@@ -29,7 +28,7 @@ const specialties = [
       "Incontinence evaluation & treatment",
       "Paediatric urology consultation",
     ],
-    stat: { value: "9000+", label: "Patients Treated" },
+    stat: { value: "200000+", label: "Patients Treated" },
   },
   {
     id: 2,
@@ -37,7 +36,7 @@ const specialties = [
     title: "Prostate Disorder",
     subtitle: "Diagnosis, treatment & long-term care",
     tag: "Specialised",
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=900&q=80&auto=format&fit=crop",
+    image: "/area of expertise/2.png",
     color: "#2CCED1",
     accent: "rgba(44,206,209,0.1)",
     icon: (
@@ -64,7 +63,7 @@ const specialties = [
     title: "Andrology & Male Infertility",
     subtitle: "Advanced reproductive urology",
     tag: "Advanced",
-    image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=900&q=80&auto=format&fit=crop",
+        image: "/area of expertise/3.png",
     color: "#6B7FD4",
     accent: "rgba(107,127,212,0.1)",
     icon: (
@@ -91,7 +90,8 @@ const specialties = [
     title: "Kidney Stone Management",
     subtitle: "Precision stone clearance & prevention",
     tag: "High-Volume",
-    image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=900&q=80&auto=format&fit=crop",
+        image: "/area of expertise/4.png",
+
     color: "#FF8A5B",
     accent: "rgba(255,138,91,0.12)",
     icon: (
@@ -109,7 +109,7 @@ const specialties = [
       "Mini / ultra-mini PCNL for complex stones",
       "24-hour urine metabolic profiling",
     ],
-    stat: { value: "470+", label: "Compact Surgeries" },
+    stat: { value: "50000+", label: "Compact Surgeries" },
   },
   {
     id: 5,
@@ -117,7 +117,8 @@ const specialties = [
     title: "Minimally Invasive & Laser",
     subtitle: "Faster recovery, superior precision",
     tag: "Technology",
-    image: "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=900&q=80&auto=format&fit=crop",
+        image: "/area of expertise/5.png",
+
     color: "#2CCED1",
     accent: "rgba(44,206,209,0.1)",
     icon: (
@@ -144,8 +145,8 @@ const specialties = [
     title: "Kidney Transplantation",
     subtitle: "Life-restoring renal replacement",
     tag: "Complex",
-    image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=900&q=80&auto=format&fit=crop",
-    color: "#E8805A",
+        image: "/area of expertise/6.png",
+
     accent: "rgba(232,128,90,0.1)",
     icon: (
       <svg viewBox="0 0 32 32" fill="none" width="26" height="26">
@@ -402,7 +403,7 @@ function SpecialtyCard({
       }}
     >
       {/* Image */}
-      <div style={{ position: "relative", height: "180px", overflow: "hidden", flexShrink: 0 }}>
+      <div style={{ position: "relative", height: "220px", overflow: "hidden", flexShrink: 0 }}>
         <img
           src={item.image}
           alt={item.title}

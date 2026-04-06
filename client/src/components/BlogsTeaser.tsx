@@ -17,10 +17,10 @@ const T = {
   border: "rgba(0,0,0,0.07)",
 };
 
-/* ─── TEASER POSTS — slugs match blogData.ts ─────────────────── */
+/* ─── TEASER POSTS ───────────────────────────────────────────── */
 interface TeaserPost {
   id:       number;
-  slug:     string;  // ← added
+  slug:     string;
   date:     string;
   title:    string;
   excerpt:  string;
@@ -35,56 +35,56 @@ const TEASERS: TeaserPost[] = [
     id: 1,
     slug: "world-class-eye-care-jaipur",
     date: "Apr 15, 2025",
-    title: "World-Class Urology Care in Jaipur — What You Need to Know",
-    excerpt: "From laser stone removal to robotic prostatectomy — expert urological care is now available right here in Jaipur. Here's what makes the difference.",
-    category: "Urology",
-    catColor: T.teal,
-    img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=900&q=85&auto=format&fit=crop",
+    title: "Your Vision, Our Priority — World-Class Eye Care in Jaipur",
+    excerpt: "From routine eye checkups to advanced surgical procedures, having access to expert ophthalmic care is vital. Discover why SRK Hospital sets new standards in vision care.",
+    category: "Eye Care",
+    catColor: "#6B7FD4",
+    img: "/Blogs' image/1stblog.png",
     readMin: 6,
   },
   {
     id: 2,
     slug: "advanced-eye-care-srk-jaipur",
     date: "Apr 12, 2025",
-    title: "Advanced Eye Care at SRK Hospital — Full Spectrum Ophthalmology",
-    excerpt: "Cataract, glaucoma, LASIK, retinal surgery — SRK Hospital covers it all with state-of-the-art technology and experienced ophthalmologists.",
+    title: "Advanced Eye Care at SRK Hospital in Jaipur",
+    excerpt: "Cataract, glaucoma, LASIK, retinal disorders — a comprehensive look at the full spectrum of ophthalmic services available at SRK Superspeciality Hospital.",
     category: "Eye Care",
     catColor: "#6B7FD4",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=85&auto=format&fit=crop",
+    img: "/Blogs' image/2nd blog.png",
     readMin: 5,
   },
   {
     id: 3,
-    slug: "best-urology-hospital-jaipur",
-    date: "Apr 7, 2025",
-    title: "Choosing the Best Urology Hospital in Jaipur for Kidney & Urinary Care",
-    excerpt: "What should you look for in a urology hospital? Clinical excellence, minimally invasive tech, and a care team that treats you as a whole person.",
-    category: "Urology",
-    catColor: T.teal,
-    img: "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=900&q=85&auto=format&fit=crop",
-    readMin: 7,
+    slug: "restoring-vision-srk-jaipur",
+    date: "Apr 11, 2025",
+    title: "Restoring Vision with Excellence — Why SRK is Jaipur's Preferred Choice",
+    excerpt: "What makes a hospital truly stand out in eye care? Clinical precision, compassionate staff, transparent pricing, and cutting-edge technology — all under one roof.",
+    category: "Eye Care",
+    catColor: "#6B7FD4",
+    img: "/Blogs' image/3rdimage.png",
+    readMin: 5,
   },
   {
     id: 4,
-    slug: "brain-hemorrhage-treatment-jaipur",
-    date: "Mar 29, 2025",
-    title: "Expert Brain Hemorrhage Treatment — What Jaipur Patients Should Know",
-    excerpt: "A brain hemorrhage is a race against time. Learn about the surgical interventions available and why immediate expert care dramatically improves outcomes.",
-    category: "Neurology",
-    catColor: "#E05A5A",
-    img: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=900&q=85&auto=format&fit=crop",
-    readMin: 4,
+    slug: "best-urology-hospital-jaipur",
+    date: "Apr 7, 2025",
+    title: "Choosing the Best Urology Hospital in Jaipur for Advanced Kidney and Urinary Care",
+    excerpt: "Urological issues often go untreated too long. Here's what to look for in a urology hospital — and why timely, expert intervention makes all the difference.",
+    category: "Urology",
+    catColor: T.teal,
+    img: "/Blogs' image/4thblog.png",
+    readMin: 7,
   },
   {
     id: 5,
-    slug: "best-urology-care-srk-hospital",
-    date: "Mar 5, 2025",
-    title: "The Best Urology Care — Kidney Stones, BPH & Cancer Treatment",
-    excerpt: "From shockwave lithotripsy to hormonal therapy for prostate cancer — a comprehensive guide to urological treatments at SRK Hospital.",
-    category: "Urology",
-    catColor: T.teal,
-    img: "https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=900&q=85&auto=format&fit=crop",
-    readMin: 6,
+    slug: "brain-hemorrhage-treatment-jaipur",
+    date: "Mar 29, 2025",
+    title: "Expert Brain Hemorrhage Treatment in Jaipur",
+    excerpt: "A brain hemorrhage demands immediate, expert neurosurgical care. Learn about emergency interventions — craniotomy, endovascular coiling — and what to do if symptoms arise.",
+    category: "Neurology",
+    catColor: "#E05A5A",
+    img: "/Blogs' image/5thblog.png",
+    readMin: 5,
   },
 ];
 
@@ -162,7 +162,7 @@ function StackCard({ vis }: { vis: boolean }) {
         );
       })}
 
-      {/* active card — wrapped in Link */}
+      {/* active card */}
       <Link
         to={`/blog/${post.slug}`}
         style={{ textDecoration: "none", display: "block", position: "absolute", inset: 0, zIndex: 10 }}
@@ -170,85 +170,82 @@ function StackCard({ vis }: { vis: boolean }) {
         <div style={{
           position: "absolute", inset: 0,
           borderRadius: "22px", overflow: "hidden",
+          background: T.dark,
           opacity: transitioning ? 0 : 1,
           transform: transitioning ? "translateY(-18px) scale(0.97)" : "translateY(0) scale(1)",
           transition: "opacity 0.44s cubic-bezier(.22,1,.36,1), transform 0.44s cubic-bezier(.22,1,.36,1)",
           cursor: "pointer",
+          display: "flex", flexDirection: "column",
         }}>
-          <img src={post.img} alt={post.title}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.5)" }}
-          />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg,rgba(13,30,40,0.2) 0%,rgba(13,30,40,0.9) 65%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: `${post.catColor}12` }} />
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2.5px", background: "linear-gradient(90deg,#2CCED1,#FF8A5B)" }} />
-
-          <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", padding: "clamp(22px,3.5vw,32px)" }}>
-            {/* top row */}
-            <Link to="/" className="nav-logo" aria-label="SRK Hospital Home">
+          {/* ── IMAGE ZONE: top 52%, 16:9-friendly, no full-card stretch ── */}
+          <div style={{ position: "relative", width: "100%", flex: "0 0 52%", overflow: "hidden" }}>
             <img
-              src="/image.png"
-              alt="SRK Hospital — Superspeciality Hospital"
-              className="nav-logo-img"
+              src={post.img}
+              alt={post.title}
+              style={{
+                position: "absolute", inset: 0,
+                width: "100%", height: "100%",
+                objectFit: "cover", objectPosition: "center center",
+                filter: "brightness(0.7)",
+              }}
             />
-          </Link>
+            {/* fade into dark body */}
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(13,30,40,0.05) 40%, rgba(13,30,40,1) 100%)" }} />
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2.5px", background: "linear-gradient(90deg,#2CCED1,#FF8A5B)" }} />
+          </div>
 
-            <div style={{ flex: 1 }} />
-
+          {/* ── TEXT ZONE: dark body below image ── */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "clamp(16px,2.5vw,24px) clamp(22px,3.5vw,32px) clamp(22px,3.5vw,32px)", background: T.dark }}>
             {/* progress bar */}
-            <div style={{ height: "1.5px", background: "rgba(255,255,255,0.1)", borderRadius: "1px", marginBottom: "20px", overflow: "hidden" }}>
+            <div style={{ height: "1.5px", background: "rgba(255,255,255,0.1)", borderRadius: "1px", marginBottom: "16px", overflow: "hidden" }}>
               <div key={active} style={{ height: "100%", background: "linear-gradient(90deg,#2CCED1,#FF8A5B)", borderRadius: "1px", animation: "bt-progress 4.5s linear" }} />
             </div>
 
-            {/* article content */}
-            <div>
-              <p style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: "8px" }}>
-                {post.date} · {post.readMin} min read
-              </p>
-              <h3 style={{
-                fontFamily: "'Cormorant Garamond',Georgia,serif",
-                fontSize: "clamp(1.5rem,3.2vw,2.2rem)", fontWeight: 700,
-                color: T.white, margin: "0 0 12px",
-                lineHeight: 1.1, letterSpacing: "-0.4px",
-              }}>{post.title}</h3>
-              <p style={{
-                fontFamily: "'DM Sans',system-ui,sans-serif",
-                fontSize: "0.82rem", color: "rgba(255,255,255,0.52)",
-                lineHeight: 1.7, fontWeight: 300, margin: "0 0 22px",
-              }}>{post.excerpt}</p>
+            <p style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: "8px" }}>
+              {post.date} · {post.readMin} min read
+            </p>
+            <h3 style={{
+              fontFamily: "'Cormorant Garamond',Georgia,serif",
+              fontSize: "clamp(1.3rem,2.8vw,1.9rem)", fontWeight: 700,
+              color: T.white, margin: "0 0 10px",
+              lineHeight: 1.15, letterSpacing: "-0.3px",
+            }}>{post.title}</h3>
+            <p style={{
+              fontFamily: "'DM Sans',system-ui,sans-serif",
+              fontSize: "0.8rem", color: "rgba(255,255,255,0.5)",
+              lineHeight: 1.65, fontWeight: 300, margin: "0 0 18px",
+              flex: 1,
+            }}>{post.excerpt}</p>
 
-              {/* bottom row */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
-                {/* dot nav — stop propagation so clicking dots doesn't navigate */}
-                <div style={{ display: "flex", gap: "6px", alignItems: "center" }}
-                  onClick={e => e.preventDefault()}
-                >
-                  {TEASERS.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={e => { e.preventDefault(); e.stopPropagation(); advance(i); startTimer(); }}
-                      style={{
-                        width: i === active ? "20px" : "7px", height: "7px", borderRadius: "4px",
-                        border: "none", cursor: "pointer", padding: 0,
-                        background: i === active ? post.catColor : "rgba(255,255,255,0.25)",
-                        transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
-                      }}
-                    />
-                  ))}
-                </div>
-                {/* read cta */}
-                <div style={{
-                  display: "flex", alignItems: "center", gap: "7px",
-                  padding: "9px 20px", borderRadius: "100px",
-                  background: "linear-gradient(135deg,#2CCED1,#1ab8bb)",
-                  color: T.white,
-                  fontFamily: "'DM Sans',system-ui,sans-serif",
-                  fontSize: "11.5px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase",
-                  boxShadow: "0 4px 16px rgba(44,206,209,0.35)",
-                  cursor: "pointer",
-                }}>
-                  <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
-                  Read Article
-                </div>
+            {/* bottom row */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "6px", alignItems: "center" }}
+                onClick={e => e.preventDefault()}
+              >
+                {TEASERS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={e => { e.preventDefault(); e.stopPropagation(); advance(i); startTimer(); }}
+                    style={{
+                      width: i === active ? "20px" : "7px", height: "7px", borderRadius: "4px",
+                      border: "none", cursor: "pointer", padding: 0,
+                      background: i === active ? post.catColor : "rgba(255,255,255,0.25)",
+                      transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
+                    }}
+                  />
+                ))}
+              </div>
+              <div style={{
+                display: "flex", alignItems: "center", gap: "7px",
+                padding: "9px 20px", borderRadius: "100px",
+                background: "linear-gradient(135deg,#2CCED1,#1ab8bb)",
+                color: T.white,
+                fontFamily: "'DM Sans',system-ui,sans-serif",
+                fontSize: "11.5px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase",
+                boxShadow: "0 4px 16px rgba(44,206,209,0.35)",
+              }}>
+                <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
+                Read Article
               </div>
             </div>
           </div>
@@ -258,7 +255,7 @@ function StackCard({ vis }: { vis: boolean }) {
   );
 }
 
-/* ─── SLIM ARTICLE ROW — each wrapped in Link ────────────────── */
+/* ─── SLIM ARTICLE ROW ───────────────────────────────────────── */
 function ArticleRow({ post, idx, vis }: { post: TeaserPost; idx: number; vis: boolean }) {
   const [hov, setHov] = useState(false);
   return (
@@ -276,6 +273,7 @@ function ArticleRow({ post, idx, vis }: { post: TeaserPost; idx: number; vis: bo
           boxShadow: hov ? `0 14px 40px ${post.catColor}14` : "0 2px 10px rgba(0,0,0,0.04)",
           transform: hov ? "translateX(5px)" : "translateX(0)",
           transition: "all 0.38s cubic-bezier(.22,1,.36,1)",
+          minHeight: "88px",
         }}
       >
         {/* accent strip */}
@@ -284,25 +282,38 @@ function ArticleRow({ post, idx, vis }: { post: TeaserPost; idx: number; vis: bo
           background: hov ? "linear-gradient(to bottom,#2CCED1,#FF8A5B)" : `${post.catColor}45`,
           transition: "background 0.38s",
         }} />
-        {/* thumb */}
-        <div style={{ width: "84px", flexShrink: 0, overflow: "hidden", position: "relative" }}>
-          <img src={post.img} alt={post.title}
+
+        {/* ── THUMBNAIL: wide enough for 16:9, fixed height via parent minHeight ── */}
+        <div style={{
+          width: "160px", flexShrink: 0,
+          overflow: "hidden", position: "relative",
+          alignSelf: "stretch",          /* fills the row height */
+        }}>
+          <img
+            src={post.img}
+            alt={post.title}
             style={{
-              width: "100%", height: "100%", objectFit: "cover",
-              transform: hov ? "scale(1.1)" : "scale(1)",
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover", objectPosition: "center center",
+              transform: hov ? "scale(1.07)" : "scale(1)",
               transition: "transform 0.55s cubic-bezier(.22,1,.36,1)",
-              filter: "brightness(0.7)",
+              filter: hov ? "brightness(0.62)" : "brightness(0.72)",
             }}
           />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right,transparent,${post.catColor}20)` }} />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right, transparent 55%, ${post.catColor}18)` }} />
+          {/* category badge overlaid on image */}
+          <span style={{
+            position: "absolute", top: "8px", left: "8px",
+            fontFamily: "'DM Sans',system-ui,sans-serif",
+            fontSize: "0.52rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase",
+            color: post.catColor, background: "rgba(13,30,40,0.72)", backdropFilter: "blur(4px)",
+            padding: "2px 7px", borderRadius: "100px", border: `1px solid ${post.catColor}40`,
+          }}>{post.category}</span>
         </div>
+
         {/* text */}
         <div style={{ flex: 1, padding: "13px 15px", display: "flex", flexDirection: "column", justifyContent: "center", gap: "4px" }}>
-          <span style={{
-            fontFamily: "'DM Sans',system-ui,sans-serif",
-            fontSize: "0.57rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
-            color: post.catColor,
-          }}>{post.category}</span>
           <h4 style={{
             fontFamily: "'Cormorant Garamond',Georgia,serif",
             fontSize: "0.95rem", fontWeight: 700,

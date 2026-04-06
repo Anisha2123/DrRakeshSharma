@@ -761,7 +761,7 @@ export default function HeroSection() {
           {/* ── updated divider text ── */}
           <div className={"divider-row " + on}>
             <div className="divider-line" />
-            <div className="divider-text">9000+ patients · 689+ advanced procedures</div>
+            <div className="divider-text">200000+ patients · 689+ advanced procedures</div>
             <div className="divider-line" />
           </div>
 
@@ -769,8 +769,8 @@ export default function HeroSection() {
           <div ref={statsRef} className={"stats-row " + on}>
             <StatCard value={25}   suffix="+"  label="Years of Experience"    delay={0}   started={statsStarted} />
             <StatCard value={689}  suffix="+"  label="Advanced Procedures"    delay={150} started={statsStarted} />
-            <StatCard value={9000} suffix="+"  label="Happy Patients"         delay={300} started={statsStarted} />
-            <StatCard value={470}  suffix="+"  label="Compact Surgeries"      delay={450} started={statsStarted} />
+            <StatCard value={200000} suffix="+"  label="Happy Patients"         delay={300} started={statsStarted} />
+            <StatCard value={50000}  suffix="+"  label="Compact Surgeries"      delay={450} started={statsStarted} />
           </div>
         </main>
 

@@ -48,7 +48,7 @@ const degrees: Degree[] = [
     field: "Medicine & Surgery",
     institution: "Sawai Man Singh (SMS) Medical College", city: "Jaipur, Rajasthan",
     university: "Rajasthan University", color: C.orange,
-    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80&auto=format&fit=crop",
+    img: "/educational-qualification/mbbs.jpeg",
     year: "Undergraduate",
     highlights: [
       "Comprehensive medical training at Rajasthan's most prestigious public medical college",
@@ -62,7 +62,7 @@ const degrees: Degree[] = [
     field: "General Surgery",
     institution: "N.H.L.M Medical College", city: "Ahmedabad, Gujarat",
     university: "Gujarat University", color: C.teal,
-    img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80&auto=format&fit=crop",
+    img: "/educational-qualification/ms.jpeg",
     year: "Post-Graduate",
     highlights: [
       "Advanced surgical training at a leading western-India institution",
@@ -71,26 +71,12 @@ const degrees: Degree[] = [
       "Developed core operative skills across gastrointestinal, vascular and trauma surgery",
     ],
   },
-  {
-    id: 3, abbr: "M.Ch.", full: "Magister Chirurgiae",
-    field: "Urology — Super-Speciality",
-    institution: "R.G. Kar Medical College & Hospital", city: "Kolkata, West Bengal",
-    university: "University of Calcutta", isGold: true, color: C.gold,
-    img: "https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=800&q=80&auto=format&fit=crop",
-    year: "Super-Specialist",
-    highlights: [
-      "Super-speciality degree in Urology — pinnacle of surgical sub-specialisation in India",
-      "Awarded the prestigious Gold Medal for outstanding academic & clinical performance",
-      "R.G. Kar Medical College — one of India's oldest and most respected teaching hospitals",
-      "Advanced training in endourology, laparoscopy, and renal transplantation",
-    ],
-  },
-  {
-    id: 4, abbr: "DNB", full: "Diplomate of National Board",
+    {
+    id: 3, abbr: "DNB", full: "Diplomate of National Board",
     field: "National Board Certification",
     institution: "National Board of Examinations", city: "New Delhi, India",
     university: "Ministry of Health & Family Welfare", color: "#6B7FD4",
-    img: "https://images.unsplash.com/photo-1562564055-71e051d33c19?w=800&q=80&auto=format&fit=crop",
+    img: "/educational-qualification/dnb.jpeg",
     year: "Board Certified",
     highlights: [
       "National-level certification — the highest mark of medical competency in India",
@@ -99,6 +85,21 @@ const degrees: Degree[] = [
       "Demonstrates mastery of clinical knowledge, diagnostic reasoning and patient care",
     ],
   },
+  {
+    id: 4, abbr: "M.Ch.", full: "Magister Chirurgiae",
+    field: "Urology — Super-Speciality",
+    institution: "R.G. Kar Medical College & Hospital", city: "Kolkata, West Bengal",
+    university: "University of Calcutta", isGold: true, color: C.gold,
+    img: "/educational-qualification/mch.jpeg",
+    year: "Super-Specialist",
+    highlights: [
+      "Super-speciality degree in Urology — pinnacle of surgical sub-specialisation in India",
+      "Awarded the prestigious Gold Medal for outstanding academic & clinical performance",
+      "R.G. Kar Medical College — one of India's oldest and most respected teaching hospitals",
+      "Advanced training in endourology, laparoscopy, and renal transplantation",
+    ],
+  },
+
 ];
 
 const roles: Role[] = [

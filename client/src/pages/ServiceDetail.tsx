@@ -64,7 +64,7 @@ const SERVICES: Service[] = [
     symptoms: ["Aching pain in the back", "Pain during urination", "Urinary tract infection signs"],
     diagnosis: ["Ultrasound", "CT-KUB", "Urine culture", "Blood tests"],
     treatments: [
-      { label: "URS (Ureterorenoscopy)", desc: "Endoscopic procedure to visualise and remove or fragment the stone." },
+      { label: "URS (Ureteroscopy)", desc: "Endoscopic procedure to visualise and remove or fragment the stone." },
       { label: "Retrograde Intrarenal Surgery", desc: "Advanced scope technique for stones in the kidney pelvis." },
       { label: "Open Surgery", desc: "Reserved for complex or very large stones unresponsive to other methods." },
     ],

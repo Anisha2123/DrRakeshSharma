@@ -36,9 +36,9 @@ function useCountUp(target: number, duration = 2400, trigger = false) {
 /* ─── DATA ───────────────────────────────────────────────────── */
 const STATS = [
   { n: 25,   suffix: "+", label: "Years of\nExperience",    color: T.orange },
-  { n: 9000, suffix: "+", label: "Happy\nPatients",         color: T.teal   },
+  { n: 200000, suffix: "+", label: "Happy\nPatients",         color: T.teal   },
   { n: 689,  suffix: "+", label: "Advanced\nProcedures",    color: T.orange },
-  { n: 470,  suffix: "+", label: "Compact\nSurgeries",      color: T.teal   },
+  { n: 50000,  suffix: "+", label: "Compact\nSurgeries",      color: T.teal   },
 ];
 
 const EXPERTISE = [
@@ -391,7 +391,7 @@ export default function DrRakeshSharmaProfile() {
                         <div key={i} style={{ width: "22px", height: "22px", borderRadius: "50%", background: c, border: `2px solid ${T.dark}`, marginLeft: i > 0 ? "-7px" : 0 }} />
                       ))}
                     </div>
-                    <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>9000+ patients</span>
+                    <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>200000+ patients</span>
                   </div>
                 </div>
               </div>

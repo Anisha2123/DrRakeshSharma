@@ -395,7 +395,7 @@ export default function Footer() {
 
                 {/* mini stat pair */}
                 <div style={{ display: "flex", gap: "10px", marginBottom: "22px" }}>
-                  {[["25+", "Yrs Exp."], ["9000+", "Patients"]].map(([v, l], i) => (
+                  {[["25+", "Yrs Exp."], ["200000+", "Patients"]].map(([v, l], i) => (
                     <div key={i} style={{
                       flex: 1, padding: "13px 14px", borderRadius: "10px",
                       background: T.dimW,

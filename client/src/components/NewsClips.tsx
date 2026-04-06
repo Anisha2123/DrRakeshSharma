@@ -184,7 +184,7 @@ function Lightbox({ clip, onClose, onPrev, onNext }: {
       }}
     >
       <div style={{
-        width: "100%", maxWidth: "900px", maxHeight: "90vh",
+        width: "100%", maxWidth: "900px", maxHeight: "95vh",
         display: "flex", flexDirection: "column",
         opacity: mounted ? 1 : 0,
         transform: mounted ? "scale(1) translateY(0)" : "scale(0.93) translateY(24px)",
@@ -324,11 +324,11 @@ function ClipCard({ clip, idx, vis, onClick }: {
 
       {/* body */}
       <div style={{ padding: "16px 18px 18px", flex: 1, display: "flex", flexDirection: "column" }}>
-        <h3 style={{
+        {/* <h3 style={{
           fontFamily: "'Cormorant Garamond',Georgia,serif",
           fontSize: "1.0rem", fontWeight: 700,
           color: T.ink, margin: "0 0 7px", lineHeight: 1.3, letterSpacing: "-0.1px",
-        }}>{clip.headline}</h3>
+        }}>{clip.headline}</h3> */}
         <p style={{
           fontFamily: "'DM Sans',system-ui,sans-serif",
           fontSize: "0.75rem", color: T.mid, lineHeight: 1.65,
@@ -420,12 +420,12 @@ function FeaturedClip({ clip, vis, onClick }: { clip: Clip; vis: boolean; onClic
           }}>
             ★ Featured Coverage
           </p>
-          <h2 style={{
+          {/* <h2 style={{
             fontFamily: "'Cormorant Garamond',Georgia,serif",
             fontSize: "clamp(1.4rem,3.2vw,2.2rem)", fontWeight: 700,
             color: T.white, margin: "0 0 10px",
             lineHeight: 1.1, letterSpacing: "-0.4px",
-          }}>{clip.headline}</h2>
+          }}>{clip.headline}</h2> */}
           <p style={{
             fontFamily: "'DM Sans',system-ui,sans-serif",
             fontSize: "0.84rem", color: "rgba(255,255,255,0.55)",

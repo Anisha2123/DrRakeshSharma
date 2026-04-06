@@ -25,7 +25,7 @@ const FEATURED = [
     tag: "Stone Disease",
     tagColor: T.teal,
     stat: "ESWL · URS · PCNL",
-    img: "/services/image.png",
+    img: "/services/kidneystone.png",
     accent: T.teal,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
@@ -36,12 +36,12 @@ const FEATURED = [
     desc: "Minimally invasive stone clearance using laser, sound waves and precision scopes — no large cuts, fast recovery.",
   },
   {
-    id: 2,
+    id: 4,
     title: "Prostate Enlargement",
     tag: "Prostate",
     tagColor: T.orange,
     stat: "HoLEP · TURP · Urolift",
-    img: "/services/image.png",
+    img: "/services/ProstateEnlargement.png",
     accent: T.orange,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
@@ -53,12 +53,12 @@ const FEATURED = [
     desc: "Gold-standard BPH management from laser enucleation to modern Urolift — restoring natural urine flow.",
   },
   {
-    id: 3,
+    id: 5,
     title: "Kidney Cancer",
     tag: "Oncology",
     tagColor: "#E05A5A",
     stat: "Robotic · Laparoscopic",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=700&q=80&auto=format&fit=crop",
+    img: "/services/KidneyCancer.png",
     accent: "#E05A5A",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
@@ -69,12 +69,12 @@ const FEATURED = [
     desc: "Robotic-assisted and laparoscopic nephrectomy — precise tumour removal with minimal downtime.",
   },
   {
-    id: 4,
+    id: 10,
     title: "Male Infertility",
     tag: "Andrology",
     tagColor: "#6B7FD4",
     stat: "IVF · TESE · Microsurgery",
-    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=700&q=80&auto=format&fit=crop",
+    img: "/services/Male Infertility.png",
     accent: "#6B7FD4",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
@@ -85,13 +85,12 @@ const FEATURED = [
     desc: "Complete andrological workup with IVF support, microsurgical sperm retrieval and hormonal therapy.",
   },
   {
-    id: 5,
+    id: 11,
     title: "Endo-Urology",
     tag: "Minimally Invasive",
     tagColor: T.teal,
     stat: "URS · PCNL · Cystoscopy",
-    img: "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=700&q=80&auto=format&fit=crop",
-    accent: T.teal,
+    img: "/services/EndoUrology.png",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
         <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -105,7 +104,7 @@ const FEATURED = [
     tag: "Andrology",
     tagColor: "#6B7FD4",
     stat: "Medication · Surgery",
-    img: "https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=700&q=80&auto=format&fit=crop",
+    img: "/services/ErectileDysfunction.png",
     accent: "#6B7FD4",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" width="22" height="22">

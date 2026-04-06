@@ -52,17 +52,22 @@ function FeaturedCard({ post, vis }: { post: typeof POSTS[0]; vis: boolean }) {
           background: T.dark,
         }}
       >
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+        {/* Image sits in the top portion, not stretched full card height */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "58%", overflow: "hidden" }}>
           <img src={post.img} alt={post.title}
             style={{
               width: "100%", height: "100%", objectFit: "cover",
+              objectPosition: "center center",
               transform: hov ? "scale(1.06)" : "scale(1)",
               transition: "transform 0.7s cubic-bezier(.22,1,.36,1)",
-              filter: "brightness(0.45)",
+              filter: "brightness(0.6)",
             }}
           />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg,rgba(13,30,40,0.35) 0%,rgba(13,30,40,0.92) 65%)` }} />
+          {/* Fade bottom of image into dark card body */}
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, rgba(13,30,40,0.1) 0%, rgba(13,30,40,0.55) 70%, rgba(13,30,40,1) 100%)` }} />
         </div>
+        {/* Dark body below the image */}
+        <div style={{ position: "absolute", top: "58%", left: 0, right: 0, bottom: 0, background: T.dark }} />
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2.5px", background: "linear-gradient(90deg,#2CCED1,#FF8A5B)" }} />
 
         <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", padding: "clamp(24px,3.5vw,36px)" }}>
@@ -140,10 +145,12 @@ function BlogCard({ post, idx, vis }: { post: typeof POSTS[0]; idx: number; vis:
           display: "flex", flexDirection: "column",
         }}
       >
-        <div style={{ position: "relative", height: "188px", overflow: "hidden", flexShrink: 0 }}>
+        {/* ── IMAGE: height increased to honour 3:2 landscape ratio ── */}
+        <div style={{ position: "relative", height: "260px", overflow: "hidden", flexShrink: 0 }}>
           <img src={post.img} alt={post.title}
             style={{
               width: "100%", height: "100%", objectFit: "cover",
+              objectPosition: "center top",
               transform: hov ? "scale(1.08)" : "scale(1)",
               transition: "transform 0.65s cubic-bezier(.22,1,.36,1)",
               filter: hov ? "brightness(0.6)" : "brightness(0.78)",
@@ -210,9 +217,10 @@ function MiniRow({ post, delay, vis }: { post: typeof POSTS[0]; delay: number; v
         }}
       >
         <div style={{ width: "3px", flexShrink: 0, background: hov ? `linear-gradient(to bottom,${T.teal},${T.orange})` : `${post.catColor}40`, transition: "background 0.35s" }} />
-        <div style={{ width: "90px", flexShrink: 0, overflow: "hidden", position: "relative" }}>
-          <img src={post.img} alt={post.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hov ? "scale(1.08)" : "scale(1)", transition: "transform 0.55s cubic-bezier(.22,1,.36,1)", filter: "brightness(0.72)" }} />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right,transparent,${post.catColor}25)` }} />
+        {/* Image container: wide enough to show landscape image without height-cropping */}
+        <div style={{ width: "320px", flexShrink: 0, overflow: "hidden", position: "relative" }}>
+          <img src={post.img} alt={post.title} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center", transform: hov ? "scale(1.06)" : "scale(1)", transition: "transform 0.55s cubic-bezier(.22,1,.36,1)", filter: "brightness(0.75)" }} />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right, transparent 60%, ${post.catColor}20)` }} />
         </div>
         <div style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <span style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: post.catColor, marginBottom: "5px", display: "block" }}>{post.category}</span>

@@ -73,7 +73,7 @@ export default function CTASection() {
 
   const stats = [
     { value: "25+", label: "Years Experience" },
-    { value: "12K+", label: "Surgeries" },
+    { value: "50K+", label: "Surgeries" },
     { value: "98%", label: "Success Rate" },
     { value: "24/7", label: "Emergency Care" },
   ];
