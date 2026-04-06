@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 /* ─── TOKENS — exact match to navbar/footer ─────────────────── */
 const T = {
@@ -557,7 +558,7 @@ function Modal({ svc, onClose }: { svc: Service | null; onClose: () => void }) {
               ))}
             </div>
           </div>
-           <a href="tel:+919887711224" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "18px", padding: "13px", borderRadius: "14px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", boxShadow: "0 6px 20px rgba(44,206,209,0.3)" }}>
+           <a href="tel:+919773332601" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "18px", padding: "13px", borderRadius: "14px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", boxShadow: "0 6px 20px rgba(44,206,209,0.3)" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
             Book Consultation
           </a>
@@ -622,10 +623,10 @@ function ServiceCard({ svc, idx, vis, onClick }: { svc: Service; idx: number; vi
 
 /* ─── MAIN ───────────────────────────────────────────────────── */
 export default function MedicalServices() {
+  const navigate = useNavigate();
   const [vis,    setVis]    = useState(false);
   const [cat,    setCat]    = useState("All");
   const [search, setSearch] = useState("");
-  const [active, setActive] = useState<Service | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -800,7 +801,7 @@ export default function MedicalServices() {
           {filtered.length > 0 ? (
             <div className="ms-grid">
               {filtered.map((svc, i) => (
-                <ServiceCard key={svc.id} svc={svc} idx={i} vis={vis} onClick={() => setActive(svc)} />
+                <ServiceCard key={svc.id} svc={svc} idx={i} vis={vis} onClick={() => navigate(`/medical-services/${svc.id}`)} />
               ))}
             </div>
           ) : (
@@ -819,7 +820,7 @@ export default function MedicalServices() {
               <p style={{ fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: "clamp(1.2rem,2.8vw,1.7rem)", fontWeight: 700, color: T.white, margin: 0, lineHeight: 1.2 }}>Not sure which service you need?</p>
               <p style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.83rem", color: "rgba(255,255,255,0.42)", margin: "5px 0 0", fontWeight: 300 }}>Book a general consultation — Dr. Sharma will guide you to the right treatment.</p>
             </div>
-             <a href="tel:+919887711224" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)", transition: "all 0.22s cubic-bezier(.34,1.56,.64,1)", position: "relative", flexShrink: 0 }}
+             <a href="tel:+919773332601" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)", transition: "all 0.22s cubic-bezier(.34,1.56,.64,1)", position: "relative", flexShrink: 0 }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 28px rgba(44,206,209,0.44)"; el.style.background = "linear-gradient(135deg,#FF8A5B,#e06030)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 16px rgba(44,206,209,0.34)"; el.style.background = "linear-gradient(135deg,#2CCED1,#1ab8bb)"; }}
             >
@@ -830,8 +831,6 @@ export default function MedicalServices() {
 
         </div>
       </section>
-
-      <Modal svc={active} onClose={() => setActive(null)} />
     </>
   );
 }
