@@ -540,7 +540,7 @@ export default function BlogTeaser() {
                 <span className="bt-blink" style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
                 Read All Articles
               </Link>
-              <a href="tel:+919887711224"
+              <a href="tel:+919773332601"
                 style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "11px 20px", borderRadius: "8px", background: "transparent", color: "rgba(255,255,255,0.55)", textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,0.12)", transition: "all 0.22s" }}
                 onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = T.orange; el.style.color = T.orange; }}
                 onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "rgba(255,255,255,0.12)"; el.style.color = "rgba(255,255,255,0.55)"; }}

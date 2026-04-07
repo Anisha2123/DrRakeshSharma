@@ -403,7 +403,7 @@ export default function BlogSection() {
               <p style={{ fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.38)", margin: "5px 0 0", fontWeight: 300 }}>Book a consultation — Dr. Sharma will guide you personally.</p>
             </div>
             <div style={{ display: "flex", gap: "10px", flexShrink: 0, position: "relative" }}>
-              <a href="tel:+919887711224" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)" }}>
+              <a href="tel:+919773332601" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 24px", borderRadius: "8px", background: "linear-gradient(135deg,#2CCED1,#1ab8bb)", color: T.white, textDecoration: "none", fontFamily: "'DM Sans',system-ui,sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", boxShadow: "0 4px 16px rgba(44,206,209,0.34)" }}>
                 <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(255,255,255,0.7)", animation: "bl-blink 2s ease-in-out infinite" }} />
                 Book Consultation
               </a>

@@ -1,791 +1,868 @@
 import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
-/* ── animated counter ── */
-function useCounter(target: number, duration = 2200, start = false) {
-  const [count, setCount] = useState(0);
+/* ─── counter hook ─── */
+function useCounter(target: number, duration = 2000, active = false) {
+  const [val, setVal] = useState(0);
   useEffect(() => {
-    if (!start) return;
+    if (!active) return;
     let s: number | null = null;
-    const step = (ts: number) => {
+    const tick = (ts: number) => {
       if (!s) s = ts;
       const p = Math.min((ts - s) / duration, 1);
-      const ease = 1 - Math.pow(1 - p, 3);
-      setCount(Math.floor(ease * target));
-      if (p < 1) requestAnimationFrame(step);
+      setVal(Math.floor((1 - Math.pow(1 - p, 3)) * target));
+      if (p < 1) requestAnimationFrame(tick);
     };
-    requestAnimationFrame(step);
-  }, [target, duration, start]);
-  return count;
+    requestAnimationFrame(tick);
+  }, [target, duration, active]);
+  return val;
 }
 
-function StatCard({ value, suffix, label, delay, started }: {
-  value: number; suffix: string; label: string; delay: number; started: boolean;
-}) {
-  const count = useCounter(value, 2200, started);
-  return (
-    <div className="stat-card" style={{ animationDelay: `${delay}ms` }}>
-      <div className="stat-value">{count}<span className="stat-suffix">{suffix}</span></div>
-      <div className="stat-label">{label}</div>
-    </div>
-  );
-}
-
-/* ── crisp anatomical kidney SVG ── */
-function KidneySVG({ uid, className = "", style }: {
-  uid: string; className?: string; style?: React.CSSProperties;
-}) {
-  return (
-    <svg className={className} style={style} viewBox="0 0 220 290" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id={`body-${uid}`} cx="38%" cy="30%" r="68%">
-          <stop offset="0%"   stopColor="#FF9B6A" />
-          <stop offset="30%"  stopColor="#e8622a" />
-          <stop offset="65%"  stopColor="#c44018" />
-          <stop offset="100%" stopColor="#2CCED1" stopOpacity="0.6" />
-        </radialGradient>
-        <radialGradient id={`med-${uid}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stopColor="#FF8A5B" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#0d2030"  stopOpacity="0.4" />
-        </radialGradient>
-        <linearGradient id={`uret-${uid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#FF8A5B" />
-          <stop offset="100%" stopColor="#2CCED1" />
-        </linearGradient>
-        <linearGradient id={`rim-${uid}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#FF9B6A" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#2CCED1"  stopOpacity="0.5" />
-        </linearGradient>
-        <filter id={`glow-${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="3.5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id={`softglow-${uid}`} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <clipPath id={`clip-${uid}`}>
-          <path d="M110 14 C66 14 32 50 28 96 C24 142 40 184 66 208 C82 222 96 226 108 224 C115 223 120 216 120 208 C120 199 113 192 113 183 C113 173 120 166 130 165 C150 163 168 150 177 132 C193 106 193 66 179 40 C165 16 140 14 110 14Z"/>
-        </clipPath>
-      </defs>
-
-      <path
-        d="M110 14 C66 14 32 50 28 96 C24 142 40 184 66 208 C82 222 96 226 108 224 C115 223 120 216 120 208 C120 199 113 192 113 183 C113 173 120 166 130 165 C150 163 168 150 177 132 C193 106 193 66 179 40 C165 16 140 14 110 14Z"
-        fill={`url(#body-${uid})`}
-      />
-      <path
-        d="M110 34 C80 34 56 56 52 86 C52 86 72 74 110 74 C148 74 168 86 168 86 C164 56 140 34 110 34Z"
-        fill="rgba(10,24,36,0.52)"
-      />
-      <ellipse cx="110" cy="142" rx="22" ry="30" fill={`url(#med-${uid})`} opacity="0.85"/>
-      <ellipse cx="96"  cy="118" rx="10" ry="6.5" fill="rgba(255,138,91,0.3)"  transform="rotate(-24 96 118)"/>
-      <ellipse cx="124" cy="125" rx="9"  ry="5.5" fill="rgba(255,138,91,0.24)" transform="rotate(18 124 125)"/>
-      <ellipse cx="106" cy="162" rx="10" ry="6.5" fill="rgba(255,138,91,0.26)" transform="rotate(-6 106 162)"/>
-      <ellipse cx="90"  cy="108" rx="5"  ry="3.5" fill="rgba(255,160,100,0.2)" transform="rotate(-20 90 108)"/>
-      <ellipse cx="120" cy="112" rx="4.5" ry="3"  fill="rgba(255,160,100,0.18)" transform="rotate(22 120 112)"/>
-      <path
-        d="M110 224 C110 238 108 250 106 264"
-        stroke={`url(#uret-${uid})`} strokeWidth="6.5" strokeLinecap="round" fill="none"
-        filter={`url(#glow-${uid})`}
-      />
-      <path d="M54 90 Q72 78 92 88"  stroke="rgba(255,138,91,0.28)" strokeWidth="1.6" fill="none" strokeLinecap="round"/>
-      <path d="M48 122 Q64 112 82 120" stroke="rgba(255,138,91,0.22)" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-      <path d="M50 154 Q66 146 82 154" stroke="rgba(255,138,91,0.17)" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-      <path d="M56 184 Q70 177 84 184" stroke="rgba(255,138,91,0.12)" strokeWidth="1"   fill="none" strokeLinecap="round"/>
-      <ellipse cx="76" cy="68" rx="20" ry="11" fill="rgba(255,240,220,0.24)" transform="rotate(-32 76 68)"/>
-      <ellipse cx="62" cy="112" rx="9"  ry="19" fill="rgba(255,220,200,0.12)" transform="rotate(-10 62 112)"/>
-      <path
-        d="M110 14 C140 14 165 16 179 40 C193 66 193 106 177 132"
-        stroke={`url(#rim-${uid})`} strokeWidth="3" fill="none"
-        filter={`url(#softglow-${uid})`} strokeLinecap="round"
-      />
-      <path
-        d="M110 14 C140 14 165 16 179 40 C193 66 193 106 177 132"
-        stroke="rgba(255,155,106,0.55)" strokeWidth="1.5" fill="none" strokeLinecap="round"
-      />
-      <path d="M96 88 Q106 100 110 120 Q114 140 106 155"  stroke="rgba(255,100,60,0.18)" strokeWidth="1" fill="none"/>
-      <path d="M122 90 Q116 105 112 125 Q108 145 114 160" stroke="rgba(255,100,60,0.14)" strokeWidth="1" fill="none"/>
-    </svg>
-  );
-}
-
-/* ── mouse-tracking hook ── */
-function useMouse() {
-  const [pos, setPos] = useState({ x: 0.5, y: 0.5 });
-  useEffect(() => {
-    const h = (e: MouseEvent) => setPos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
-    window.addEventListener("mousemove", h, { passive: true });
-    return () => window.removeEventListener("mousemove", h);
-  }, []);
-  return pos;
-}
-
-export default function HeroSection() {
-  const [mounted, setMounted]           = useState(false);
-  const [statsStarted, setStatsStarted] = useState(false);
-  const [hoveredWord, setHoveredWord]   = useState<number | null>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const mouse    = useMouse();
+/* ─────────────────────────────────────────────────────────────────────────────
+   THREE.JS SCENE
+   Camera framing: kidney centred in panel with ~10% top padding
+   Camera FOV tightened + position raised so organ fills the frame top-to-bottom
+───────────────────────────────────────────────────────────────────────────── */
+function KidneyScene() {
+  const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 80);
-    return () => clearTimeout(t);
-  }, []);
+    const el = mountRef.current;
+    if (!el) return;
 
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setStatsStarted(true); },
-      { threshold: 0.3 }
+    const W = el.clientWidth, H = el.clientHeight;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(W, H);
+    renderer.setClearColor(0x000000, 0);
+    el.appendChild(renderer.domElement);
+
+    const scene  = new THREE.Scene();
+    /* ── Camera: tighter FOV, shifted UP so kidney fills panel without top gap */
+    const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 400);
+    // Position camera higher and look slightly above centre
+    // so the kidney sits in the upper-centre of the panel
+    camera.position.set(0, 1.8, 13);
+    camera.lookAt(0, 1.2, 0);
+
+    const clock = new THREE.Clock();
+    let mx = 0, my = 0;
+    const onMM = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      mx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+      my = -((e.clientY - r.top)  / r.height - 0.5) * 2;
+    };
+    window.addEventListener("mousemove", onMM, { passive: true });
+
+    /* ── tube helper ── */
+    function tubeMesh(pts: THREE.Vector3[], r: number, color: number, opacity: number, segs = 12) {
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const geo   = new THREE.TubeGeometry(curve, 80, r, segs, false);
+      const mat   = new THREE.MeshPhongMaterial({ color, transparent: true, opacity, shininess: 80, specular: new THREE.Color(0x222222) });
+      return { mesh: new THREE.Mesh(geo, mat), curve };
+    }
+
+    /* ══════════════════════════════════════════════════════
+       1. KIDNEY — sculpted bean mesh, positioned at y=1.2
+          so it sits centre-high inside the panel
+    ══════════════════════════════════════════════════════ */
+    const cortexGeo = new THREE.SphereGeometry(2.0, 72, 72);
+    {
+      const pos = cortexGeo.attributes.position as THREE.BufferAttribute;
+      for (let i = 0; i < pos.count; i++) {
+        let x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+        if (x < 0) {
+          const d = Math.abs(x) / 2.0;
+          x += d * Math.exp(-y * y * 0.4) * 1.1;
+        }
+        if (y > 1.1) y *= 0.86;
+        if (z < -0.6) z *= 0.78;
+        pos.setXYZ(i, x * 0.88, y * 1.28, z * 0.80);
+      }
+      cortexGeo.computeVertexNormals();
+    }
+
+    const cortexMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime:   { value: 0 },
+        uBeat:   { value: 0 },
+        uTeal:   { value: new THREE.Color(0x2CCED1) },
+        uOrange: { value: new THREE.Color(0xFF8A5B) },
+      },
+      vertexShader: `
+        uniform float uBeat;
+        varying vec3 vN; varying vec3 vPos; varying vec3 vWP;
+        void main(){
+          vN = normalize(normalMatrix * normal);
+          vPos = position;
+          float sw = 1.0 + uBeat * 0.028;
+          vec4 wp  = modelMatrix * vec4(position * sw, 1.0);
+          vWP = wp.xyz;
+          gl_Position = projectionMatrix * viewMatrix * wp;
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime; uniform float uBeat;
+        uniform vec3 uTeal; uniform vec3 uOrange;
+        varying vec3 vN; varying vec3 vPos; varying vec3 vWP;
+        void main(){
+          float t = clamp((vPos.y/1.28+1.0)*0.5, 0.0, 1.0);
+          vec3 tissue = mix(vec3(0.36,0.06,0.06), mix(vec3(0.60,0.11,0.09), vec3(0.70,0.18,0.14), t), t);
+          vec3 kl  = normalize(vec3(1.6, 2.4, 2.8));
+          float kd = max(dot(vN,kl),0.0)*0.72 + 0.28;
+          tissue = mix(tissue, vec3(0.84,0.10,0.09), uBeat*0.30);
+          vec3 vDir = normalize(cameraPosition - vWP);
+          float rim = pow(1.0 - max(dot(vN,vDir),0.0), 2.8);
+          vec3 col  = tissue * kd;
+          col += uOrange * rim * 0.38;
+          col += uTeal   * rim * 0.12;
+          float cap = sin(vPos.x*16.0)*sin(vPos.y*13.0)*sin(vPos.z*11.0);
+          col += vec3(0.04,0.0,0.0)*(cap*0.5+0.5)*0.13;
+          gl_FragColor = vec4(col, 0.97);
+        }
+      `,
+      transparent: true,
+    });
+
+    /* Place kidney at y=1.2 — vertically centred in the panel when camera looks at y=1.2 */
+    const kidney = new THREE.Mesh(cortexGeo, cortexMat);
+    kidney.position.set(0, 1.2, 0);
+    scene.add(kidney);
+
+    const medMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(1.15, 28, 28),
+      new THREE.MeshPhongMaterial({ color: 0xb83030, transparent: true, opacity: 0.52 })
     );
+    medMesh.scale.set(0.88, 1.22, 0.76);
+    medMesh.position.copy(kidney.position);
+    scene.add(medMesh);
+
+    const hilum = new THREE.Mesh(
+      new THREE.SphereGeometry(0.46, 14, 14),
+      new THREE.MeshPhongMaterial({ color: 0x440000, transparent: true, opacity: 0.9 })
+    );
+    hilum.position.set(-1.44, 1.2, 0.12);
+    hilum.scale.set(0.60, 1, 0.55);
+    scene.add(hilum);
+
+    const capGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+      color: 0xFF8A5B, transparent: true, opacity: 0.07, blending: THREE.AdditiveBlending,
+    }));
+    capGlow.scale.setScalar(8.2);
+    capGlow.position.copy(kidney.position);
+    scene.add(capGlow);
+
+    /* ══════════════════════════════════════════════════════
+       2 & 3. RENAL ARTERY + VEIN — branching from aorta
+    ══════════════════════════════════════════════════════ */
+    const KY = 1.2; // kidney y offset
+    const { mesh: artMesh, curve: artCurve } = tubeMesh([
+      new THREE.Vector3(-3.9, KY+0.45, 0.3),
+      new THREE.Vector3(-2.6, KY+0.50, 0.2),
+      new THREE.Vector3(-1.8, KY+0.34, 0.05),
+      new THREE.Vector3(-1.44,KY+0.24, 0.0),
+    ], 0.090, 0xdd1111, 0.92, 12);
+    scene.add(artMesh);
+
+    const { mesh: veinMesh, curve: veinCurve } = tubeMesh([
+      new THREE.Vector3(-3.9, KY-0.15, 0.25),
+      new THREE.Vector3(-2.6, KY-0.10, 0.18),
+      new THREE.Vector3(-1.8, KY-0.18, 0.05),
+      new THREE.Vector3(-1.44,KY-0.24, 0.0),
+    ], 0.076, 0x2244cc, 0.88, 12);
+    scene.add(veinMesh);
+
+    // Aorta — vertical, left side
+    const { mesh: aortaMesh } = tubeMesh([
+      new THREE.Vector3(-3.9, KY-4.0, 0.2),
+      new THREE.Vector3(-3.9, KY+0.0, 0.2),
+      new THREE.Vector3(-3.9, KY+4.0, 0.2),
+    ], 0.13, 0xcc0000, 0.90, 14);
+    scene.add(aortaMesh);
+
+    /* ══════════════════════════════════════════════════════
+       4. URETER — descends from hilum
+    ══════════════════════════════════════════════════════ */
+    const { mesh: uretMesh, curve: uretCurve } = tubeMesh([
+      new THREE.Vector3(-1.42, KY-0.60, 0.08),
+      new THREE.Vector3(-1.56, KY-1.70,-0.05),
+      new THREE.Vector3(-1.70, KY-3.00, 0.0),
+      new THREE.Vector3(-1.88, KY-4.20, 0.0),
+    ], 0.038, 0xc8a820, 0.74, 8);
+    scene.add(uretMesh);
+
+    /* ══════════════════════════════════════════════════════
+       5. FLOW PARTICLES — RBC / WBC / Urine
+    ══════════════════════════════════════════════════════ */
+    interface FP { mesh: THREE.Mesh; curve: THREE.CatmullRomCurve3; t: number; spd: number; kind: "rbc"|"wbc"|"urine" }
+    const fps: FP[] = [];
+    function spawnFP(curve: THREE.CatmullRomCurve3, kind: FP["kind"], t0: number): FP {
+      const col  = kind==="rbc" ? 0xff2020 : kind==="wbc" ? 0xdde8ff : 0xe8d030;
+      const size = kind==="rbc" ? 0.058    : kind==="wbc" ? 0.072    : 0.040;
+      const geo  = new THREE.SphereGeometry(size, 5, 5);
+      const mat  = new THREE.MeshPhongMaterial({ color: col, emissive: new THREE.Color(col).multiplyScalar(0.28), transparent: true, opacity: 0.9, shininess: 80 });
+      const mesh = new THREE.Mesh(geo, mat);
+      scene.add(mesh);
+      return { mesh, curve, t: t0, spd: 0.005 + Math.random()*0.003, kind };
+    }
+    for (let i = 0; i < 22; i++) fps.push(spawnFP(artCurve,  "rbc",   i/22));
+    for (let i = 0; i < 16; i++) fps.push(spawnFP(veinCurve, "wbc",   i/16));
+    for (let i = 0; i < 12; i++) fps.push(spawnFP(uretCurve, "urine", i/12));
+
+    /* ══════════════════════════════════════════════════════
+       6. KIDNEY STONE + LITHOTRIPSY
+    ══════════════════════════════════════════════════════ */
+    const stoneGrp = new THREE.Group();
+    stoneGrp.position.set(-0.3, KY-0.4, 0.7);
+    for (let i = 0; i < 5; i++) {
+      const g = new THREE.DodecahedronGeometry(0.07 + Math.random()*0.08, 0);
+      const p = g.attributes.position as THREE.BufferAttribute;
+      for (let j = 0; j < p.count; j++)
+        p.setXYZ(j, p.getX(j)*(0.65+Math.random()*0.7), p.getY(j)*(0.65+Math.random()*0.7), p.getZ(j)*(0.65+Math.random()*0.7));
+      g.computeVertexNormals();
+      const m = new THREE.Mesh(g, new THREE.MeshPhongMaterial({ color: 0xd0b85c, emissive: 0x3a2c00, shininess: 30 }));
+      m.position.set((Math.random()-.5)*.30,(Math.random()-.5)*.24,(Math.random()-.5)*.16);
+      stoneGrp.add(m);
+    }
+    scene.add(stoneGrp);
+
+    let shattered = false, shatterT = 0;
+    const fragVel = stoneGrp.children.map(() => new THREE.Vector3(
+      (Math.random()-.5)*.045,(Math.random()-.5)*.040,(Math.random()-.5)*.038
+    ));
+
+    const laserMat = new THREE.LineBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+    scene.add(new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(5,KY+3,3), new THREE.Vector3(-0.3,KY-0.4,0.7)]),
+      laserMat
+    ));
+    const laserGlowMat = new THREE.SpriteMaterial({ color: 0xff6600, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+    const laserGlow = new THREE.Sprite(laserGlowMat);
+    laserGlow.scale.setScalar(0.55);
+    laserGlow.position.set(-0.3, KY-0.4, 0.7);
+    scene.add(laserGlow);
+
+    /* ══════════════════════════════════════════════════════
+       7. ULTRASOUND SCAN PLANE
+    ══════════════════════════════════════════════════════ */
+    const usMat = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 } },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+      fragmentShader: `
+        uniform float uTime; varying vec2 vUv;
+        void main(){
+          float scan  = fract(uTime*0.25);
+          float beam  = exp(-abs(vUv.y - scan)*30.0);
+          float speck = fract(sin(vUv.x*51.0+vUv.y*37.0+uTime*0.6)*6831.0);
+          speck = step(0.74, speck)*0.065;
+          float fade  = 1.0 - length(vUv - 0.5)*1.6;
+          fade = clamp(fade, 0.0, 1.0);
+          gl_FragColor = vec4(0.17, 0.81, 0.82, (beam*0.52+speck)*fade);
+        }
+      `,
+      transparent: true, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    const usMesh = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 6.8), usMat);
+    usMesh.position.set(0, KY, 0.05);
+    scene.add(usMesh);
+
+    /* ══════════════════════════════════════════════════════
+       8. VASCULAR GRAFT
+    ══════════════════════════════════════════════════════ */
+    const graftCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-3.9, KY+0.45, 0.3),
+      new THREE.Vector3(-2.4, KY+2.6,  1.2),
+      new THREE.Vector3(0,    KY+3.2,  1.4),
+      new THREE.Vector3(2.4,  KY+2.6,  1.2),
+      new THREE.Vector3(3.9,  KY+0.45, 0.3),
+    ]);
+    const graftMat = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uA: { value: 0 } },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+      fragmentShader: `
+        uniform float uTime; uniform float uA; varying vec2 vUv;
+        void main(){
+          float flow   = fract(vUv.x - uTime*0.22);
+          float stream = exp(-abs(flow-0.5)*20.0);
+          float edge   = 1.0 - abs(vUv.y-0.5)*2.2;
+          edge = clamp(edge,0.0,1.0)*edge;
+          vec3 col = mix(vec3(0.13,0.27,0.88), vec3(0.9,0.08,0.08), flow);
+          gl_FragColor = vec4(col, stream*edge*uA);
+        }
+      `,
+      transparent: true, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    scene.add(new THREE.Mesh(new THREE.TubeGeometry(graftCurve, 100, 0.076, 12, false), graftMat));
+
+    const gPs: { mesh: THREE.Mesh; t: number; spd: number }[] = [];
+    for (let i = 0; i < 26; i++) {
+      const m = new THREE.Mesh(
+        new THREE.SphereGeometry(0.052, 5, 5),
+        new THREE.MeshBasicMaterial({ color: 0xff1818, transparent: true, opacity: 0, blending: THREE.AdditiveBlending })
+      );
+      scene.add(m);
+      gPs.push({ mesh: m, t: i/26, spd: 0.005+Math.random()*0.003 });
+    }
+
+    /* ══════════════════════════════════════════════════════
+       9. AMBIENT PARTICLES
+    ══════════════════════════════════════════════════════ */
+    const aN = 220;
+    const aPos = new Float32Array(aN*3), aCol = new Float32Array(aN*3);
+    for (let i = 0; i < aN; i++) {
+      aPos[i*3]   = (Math.random()-.5)*18;
+      aPos[i*3+1] = (Math.random()-.5)*14 + KY;
+      aPos[i*3+2] = (Math.random()-.5)*6 - 2;
+      const r = Math.random();
+      if      (r < 0.42) { aCol[i*3]=0.76; aCol[i*3+1]=0.07; aCol[i*3+2]=0.07; }
+      else if (r < 0.66) { aCol[i*3]=0.17; aCol[i*3+1]=0.81; aCol[i*3+2]=0.82; }
+      else               { aCol[i*3]=0.15; aCol[i*3+1]=0.22; aCol[i*3+2]=0.82; }
+    }
+    const aGeo = new THREE.BufferGeometry();
+    aGeo.setAttribute("position", new THREE.BufferAttribute(aPos, 3));
+    aGeo.setAttribute("color",    new THREE.BufferAttribute(aCol, 3));
+    scene.add(new THREE.Points(aGeo, new THREE.PointsMaterial({
+      size: 0.038, vertexColors: true, transparent: true, opacity: 0.30,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })));
+
+    /* ══════════════════════════════════════════════════════
+       10. ANATOMY HAIRLINES
+    ══════════════════════════════════════════════════════ */
+    function hair(a: THREE.Vector3, b: THREE.Vector3, col: number) {
+      const geo = new THREE.BufferGeometry().setFromPoints([a, b]);
+      const mat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.28 });
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(0.04,5,5), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.5 }));
+      dot.position.copy(a);
+      const g = new THREE.Group(); g.add(new THREE.Line(geo, mat), dot); return g;
+    }
+    scene.add(hair(new THREE.Vector3(-2.2,KY+0.55,0), new THREE.Vector3(-2.2,KY+2.2,0), 0xee2222));
+    scene.add(hair(new THREE.Vector3(-2.2,KY-0.12,0), new THREE.Vector3(-2.5,KY-1.6,0), 0x3355ff));
+    scene.add(hair(new THREE.Vector3(-1.56,KY-1.3,0), new THREE.Vector3(0.4,KY-2.0,0), 0xc8a820));
+    scene.add(hair(new THREE.Vector3(-0.3,KY-0.4,0.7),new THREE.Vector3(1.8,KY+0.8,0), 0xd0b85c));
+
+    /* ── Lighting ── */
+    scene.add(new THREE.AmbientLight(0x180808, 1.6));
+    const kL = new THREE.DirectionalLight(0xffaa77, 1.7); kL.position.set(5, 8, 8);  scene.add(kL);
+    const fL = new THREE.DirectionalLight(0x2CCED1, 0.4); fL.position.set(-5,-2, 4); scene.add(fL);
+    const rL = new THREE.DirectionalLight(0x2244aa, 0.3); rL.position.set(0, -5, -4); scene.add(rL);
+
+    /* Heartbeat point light */
+    const bLight = new THREE.PointLight(0xff1111, 0, 12);
+    bLight.position.set(0, KY+0.5, 3);
+    scene.add(bLight);
+
+    /* ── Heartbeat ── */
+    const PER = 60/72;
+    const beat = (t: number) => {
+      const ph = (t % PER) / PER;
+      if (ph < 0.12) return Math.sin((ph/0.12)*Math.PI);
+      if (ph < 0.28) return Math.exp(-(ph-0.12)/0.065)*0.38;
+      return 0;
+    };
+
+    /* ── Resize ── */
+    const onResize = () => {
+      camera.aspect = el.clientWidth / el.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(el.clientWidth, el.clientHeight);
+    };
+    window.addEventListener("resize", onResize);
+
+    /* ── Loop ── */
+    const SHATTER_AT = 13, GRAFT_AT = 5.5;
+    let rafId: number;
+
+    const animate = () => {
+      rafId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      const bv = beat(t);
+
+      cortexMat.uniforms.uTime.value = t;
+      cortexMat.uniforms.uBeat.value = bv;
+      bLight.intensity = bv * 2.4;
+
+      /* Breathing */
+      const breathe = Math.sin(t*0.36)*0.06;
+      const ky = KY + breathe + bv*0.045;
+      kidney.position.y   = ky;
+      medMesh.position.y  = ky;
+      hilum.position.y    = ky;
+      capGlow.position.y  = ky;
+      stoneGrp.position.y = KY - 0.4 + breathe + bv*0.045;
+      usMesh.position.y   = ky;
+
+      /* Mouse parallax — gentle */
+      kidney.rotation.y = mx*0.055 + Math.sin(t*0.14)*0.032;
+      kidney.rotation.x = my*0.038;
+      medMesh.rotation.copy(kidney.rotation);
+      hilum.rotation.copy(kidney.rotation);
+
+      /* Artery pulse */
+      artMesh.scale.x = artMesh.scale.z = 1 + bv*0.22;
+
+      /* US */
+      usMat.uniforms.uTime.value = t;
+
+      /* Graft */
+      graftMat.uniforms.uTime.value = t;
+      const gA = Math.min(Math.max((t-GRAFT_AT)/3.0, 0), 1);
+      graftMat.uniforms.uA.value = gA;
+      gPs.forEach(gp => {
+        gp.t += gp.spd; if (gp.t>1) gp.t-=1;
+        gp.mesh.position.copy(graftCurve.getPoint(gp.t));
+        (gp.mesh.material as THREE.MeshBasicMaterial).opacity = gA*0.72;
+      });
+
+      /* Flow particles */
+      fps.forEach(fp => {
+        const sm = fp.kind==="rbc" ? 1+bv*2.0 : fp.kind==="urine" ? 1+Math.sin(t*1.8)*0.28 : 1;
+        fp.t += fp.spd*sm; if (fp.t>1) fp.t-=1;
+        fp.mesh.position.copy(fp.curve.getPoint(fp.t));
+        if (fp.kind==="rbc") {
+          fp.mesh.lookAt(fp.mesh.position.clone().add(fp.curve.getTangent(fp.t)));
+          fp.mesh.scale.z = 0.48;
+        }
+      });
+
+      /* Stone */
+      stoneGrp.rotation.y += 0.008;
+      stoneGrp.rotation.x += 0.003;
+      if (!shattered && t>SHATTER_AT) { shattered=true; shatterT=0; }
+      if (!shattered) {
+        laserMat.opacity     = 0.04 + 0.035*Math.sin(t*3.6);
+        laserGlowMat.opacity = 0.07 + 0.05*Math.sin(t*3.6);
+      } else {
+        shatterT += 0.016;
+        laserMat.opacity     = Math.max(0, 0.92 - shatterT*0.12);
+        laserGlowMat.opacity = Math.max(0, 0.96 - shatterT*0.12);
+        stoneGrp.children.forEach((ch, i) => {
+          ch.position.addScaledVector(fragVel[i], 1);
+          (ch as THREE.Mesh).scale.multiplyScalar(0.992 - shatterT*0.003);
+        });
+        if (shatterT>20) {
+          shattered=false;
+          stoneGrp.children.forEach(ch => {
+            ch.position.set((Math.random()-.5)*.30,(Math.random()-.5)*.24,(Math.random()-.5)*.16);
+            (ch as THREE.Mesh).scale.setScalar(1);
+          });
+        }
+      }
+
+      /* Camera — smooth parallax, always looking at kidney centre */
+      camera.position.x += (mx*0.7 - camera.position.x)*0.022;
+      // y stays near 1.8 — small vertical drift only
+      camera.position.y += (my*0.3 + 1.8 - camera.position.y)*0.022;
+      camera.lookAt(0, ky, 0);
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", onMM);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={mountRef} style={{ position:"absolute", inset:0 }} />;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HERO — light theme, split layout
+───────────────────────────────────────────────────────────────────────────── */
+export default function HeroSection() {
+  const [on, setOn]       = useState(false);
+  const [stats, setStats] = useState(false);
+  const statsRef          = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { const t = setTimeout(()=>setOn(true), 80); return ()=>clearTimeout(t); }, []);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting) setStats(true); },{ threshold:0.3 });
     if (statsRef.current) obs.observe(statsRef.current);
     return () => obs.disconnect();
   }, []);
 
-  const on = mounted ? "on" : "";
-
-  const px = (mouse.x - 0.5) * 28;
-  const py = (mouse.y - 0.5) * 18;
-
-  const particles = Array.from({ length: 26 }, (_, i) => ({
-    width:  `${3 + ((i * 37) % 7)}px`,
-    height: `${3 + ((i * 37) % 7)}px`,
-    left:   `${(i * 13 + 7) % 100}%`,
-    top:    `${(i * 19 + 11) % 100}%`,
-    animationDuration: `${4 + (i % 6)}s`,
-    animationDelay:    `${(i * 0.36) % 5}s`,
-    background: i % 3 === 0 ? "rgba(255,138,91,0.6)" : i % 3 === 1 ? "rgba(44,206,209,0.6)" : "rgba(44,206,209,0.3)",
-  }));
+  const c25  = useCounter(25,     2000, stats);
+  const c689 = useCounter(689,    2200, stats);
+  const c200 = useCounter(200000, 2400, stats);
+  const c50  = useCounter(50000,  2200, stats);
+  const o = on ? "on" : "";
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-        :root{
-          --teal:#2CCED1;--light:#F4F4F4;--white:#FFFFFF;
-          --orange:#FF8A5B;--dark:#0d1e28;--text:#1a3040;
-        }
-        body{font-family:'DM Sans',sans-serif;background:var(--light);}
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
-        .hero-root{
-          position:relative;min-height:100vh;background:var(--light);
-          overflow:hidden;display:flex;flex-direction:column;
-        }
-        .hero-root::before{
-          content:'';position:absolute;inset:0;
-          background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-          opacity:.018;pointer-events:none;z-index:0;
-        }
-        .hero-root::after{
-          content:'';position:absolute;width:960px;height:960px;
-          top:-340px;left:-260px;border-radius:50%;
-          background:radial-gradient(circle,rgba(44,206,209,0.1) 0%,transparent 65%);
-          pointer-events:none;z-index:0;
-          animation:glowP 10s ease-in-out infinite;
-        }
-        @keyframes glowP{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
-
-        .grid-lines{
-          position:absolute;inset:0;
-          background-image:linear-gradient(rgba(44,206,209,0.055) 1px,transparent 1px),
-                            linear-gradient(90deg,rgba(44,206,209,0.055) 1px,transparent 1px);
-          background-size:64px 64px;z-index:0;pointer-events:none;
-        }
-        .blob-orange{
-          position:absolute;width:600px;height:600px;bottom:-200px;right:-160px;border-radius:50%;
-          background:radial-gradient(circle,rgba(255,138,91,0.13) 0%,transparent 65%);
-          filter:blur(80px);z-index:0;pointer-events:none;
-          animation:blobF 14s ease-in-out infinite;
-        }
-        @keyframes blobF{0%,100%{transform:scale(1) translate(0,0);}40%{transform:scale(1.1) translate(-20px,-28px);}70%{transform:scale(.94) translate(14px,18px);}}
-
-        .particle{position:absolute;border-radius:50%;pointer-events:none;z-index:1;animation:pRise linear infinite;}
-        @keyframes pRise{0%{transform:translateY(20px) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-110px) scale(1.3);opacity:0;}}
-
-        .kidney-bg-1{
-          position:absolute;width:500px;height:625px;left:-100px;top:50%;
-          transform:translateY(-54%);z-index:1;pointer-events:none;
-          opacity:0;transition:opacity 2.2s ease .3s;
-          animation:kb1 22s ease-in-out infinite 2.5s;
-          filter:blur(2px) saturate(.45);
-        }
-        .kidney-bg-1.on{opacity:.09;}
-        @keyframes kb1{0%,100%{transform:translateY(-54%) rotate(-7deg) scale(1);}50%{transform:translateY(-51%) rotate(5deg) scale(1.05);}}
-
-        .kidney-bg-2{
-          position:absolute;width:340px;height:425px;right:-50px;top:20px;
-          z-index:1;pointer-events:none;
-          opacity:0;transition:opacity 2.2s ease .5s;
-          animation:kb2 26s ease-in-out infinite 2.5s;
-          filter:blur(3px) saturate(.32);
-        }
-        .kidney-bg-2.on{opacity:.065;}
-        @keyframes kb2{0%,100%{transform:rotate(15deg) scale(1);}50%{transform:rotate(-5deg) scale(1.06);}}
-
-        .kidney-bg-3{
-          position:absolute;width:210px;height:262px;left:56%;bottom:-20px;
-          z-index:1;pointer-events:none;
-          opacity:0;transition:opacity 2.2s ease .7s;
-          animation:kb3 18s ease-in-out infinite 3s;
-          filter:blur(4px) saturate(.24);
-        }
-        .kidney-bg-3.on{opacity:.05;}
-        @keyframes kb3{0%,100%{transform:rotate(-10deg) translateY(0);}50%{transform:rotate(7deg) translateY(-18px);}}
-
-        .kidney-fg-wrap{
-          position:absolute;width:320px;height:400px;
-          right:52px;top:50%;
-          z-index:8;pointer-events:none;
-          transition:transform .08s linear;
+        :root {
+          --teal:    #2CCED1;
+          --orange:  #FF8A5B;
+          --light:   #F4F4F4;
+          --white:   #FFFFFF;
+          --ink:     #ffffff;        /* white for headings on dark bg */
+          --body:    #b8c5d0;        /* light text for body */
+          --muted:   #7a9aaa;        /* secondary text */
+          --border:  rgba(44,206,209,0.14);
+          --bg:      #0d1520;        /* page background = dark canvas */
+          --panel:   #0d1520;        /* left panel = dark canvas */
+          --canvas:  #0d1520;        /* right panel = dark for 3D contrast */
         }
 
-        .kidney-fg{
-          position:absolute;inset:0;
-          opacity:0;transition:opacity 1.3s ease .95s;
-          animation:kfgFloat 8s ease-in-out infinite 2.2s;
-          filter:
-            drop-shadow(0 0 24px rgba(255,138,91,.65))
-            drop-shadow(0 0 60px rgba(255,138,91,.28))
-            drop-shadow(0 0 100px rgba(44,206,209,.18));
+        /* ════ ROOT ════ */
+        .srk { min-height:100vh; display:flex; flex-direction:column; background:var(--bg); font-family:'DM Sans',sans-serif; overflow:hidden; }
+
+        /* ════ NAVBAR ════ */
+        .srk-nav {
+          display:flex; align-items:center; justify-content:space-between;
+          padding:0 56px; height:66px; flex-shrink:0;
+          background:var(--white);
+          border-bottom:1px solid rgba(44,206,209,0.12);
+          box-shadow:0 1px 24px rgba(13,30,40,0.06);
+          opacity:0; transform:translateY(-16px);
+          transition:opacity .6s ease, transform .6s ease;
         }
-        .kidney-fg.on{opacity:1;}
-        @keyframes kfgFloat{
-          0%  {transform:rotate(-2deg) translateY(0px)   scale(1);}
-          25% {transform:rotate(1deg)  translateY(-12px) scale(1.01);}
-          50% {transform:rotate(3deg)  translateY(-20px) scale(1.015);}
-          75% {transform:rotate(0deg)  translateY(-10px) scale(1.008);}
-          100%{transform:rotate(-2deg) translateY(0px)   scale(1);}
+        .srk-nav.on { opacity:1; transform:translateY(0); }
+
+        .nav-logo { display:flex; align-items:center; gap:11px; text-decoration:none; }
+        .nav-logo-pill {
+          width:38px; height:38px; border-radius:8px; background:var(--white);
+          border:1px solid rgba(44,206,209,0.18);
+          display:flex; align-items:center; justify-content:center;
+          box-shadow:0 0 14px rgba(44,206,209,0.14);
         }
+        .nav-logo-pill img { width:26px; height:26px; object-fit:contain; mix-blend-mode:multiply; }
+        .nav-logo-name { font-size:14px; font-weight:600; color:var(--ink); letter-spacing:.1px; }
+        .nav-logo-sub  { font-size:8.5px; color:var(--teal); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
 
-        .kidney-halo{
-          position:absolute;
-          width:280px;height:320px;
-          top:50%;left:50%;
-          transform:translate(-50%,-50%);
-          border-radius:50%;
-          background:radial-gradient(ellipse,rgba(255,138,91,0.22) 0%,rgba(44,206,209,0.08) 50%,transparent 70%);
-          animation:haloBreath 8s ease-in-out infinite 2s;
-          filter:blur(20px);
-          z-index:7;
-          opacity:0;transition:opacity 1.4s ease 1.2s;
+        .nav-links { display:flex; gap:30px; }
+        .nav-links a { font-size:11px; font-weight:400; color:var(--muted); text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s; }
+        .nav-links a:hover { color:var(--teal); }
+
+        .nav-cta {
+          display:flex; align-items:center; gap:7px; padding:8px 18px;
+          border:1px solid var(--teal); border-radius:100px;
+          font-size:11px; font-weight:500; color:var(--teal);
+          letter-spacing:.9px; text-transform:uppercase;
+          background:rgba(44,206,209,0.06); text-decoration:none;
+          transition:background .2s, color .2s;
         }
-        .kidney-halo.on{opacity:1;}
-        @keyframes haloBreath{
-          0%,100%{transform:translate(-50%,-50%) scale(1);   opacity:.8;}
-          50%     {transform:translate(-50%,-52%) scale(1.15);opacity:1;}
+        .nav-cta:hover { background:var(--teal); color:#fff; }
+        .nav-dot {
+          width:5px; height:5px; border-radius:50%;
+          background:var(--teal); box-shadow:0 0 6px var(--teal);
+          animation:dotP 2s ease-in-out infinite;
         }
+        @keyframes dotP { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.3;transform:scale(1.7);} }
 
-        .pulse-rings{position:absolute;inset:-30%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-        .pr{position:absolute;border-radius:50%;animation:prEx 3.8s ease-out infinite;}
-        .pr-1{width:86%;height:86%;border:1.5px solid rgba(255,138,91,.52);animation-delay:0s;}
-        .pr-2{width:106%;height:106%;border:1px solid rgba(255,138,91,.3);animation-delay:1.26s;}
-        .pr-3{width:128%;height:128%;border:1px solid rgba(44,206,209,.22);animation-delay:2.52s;}
-        @keyframes prEx{0%{transform:scale(.65);opacity:.9;}100%{transform:scale(1.2);opacity:0;}}
-
-        .kidney-scan{
-          position:absolute;left:0;right:0;height:2px;
-          background:linear-gradient(to right,transparent,rgba(44,206,209,.85),transparent);
-          animation:scanL 3.4s linear infinite;z-index:11;
-        }
-        @keyframes scanL{0%{top:0%;opacity:0;}4%{opacity:1;}92%{opacity:.9;}100%{top:100%;opacity:0;}}
-
-        .orbit-wrap{position:absolute;inset:-22%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
-        .od{position:absolute;border-radius:50%;top:50%;left:50%;}
-        .od-1{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;background:#FF8A5B;box-shadow:0 0 14px rgba(255,138,91,1),0 0 28px rgba(255,138,91,.5);animation:orb1 5.8s linear infinite;}
-        .od-2{width:7px; height:7px; margin:-3.5px 0 0 -3.5px;background:#2CCED1;box-shadow:0 0 12px rgba(44,206,209,1),0 0 24px rgba(44,206,209,.4);animation:orb2 9s linear infinite;}
-        .od-3{width:5px; height:5px; margin:-2.5px 0 0 -2.5px;background:#fff;  box-shadow:0 0 8px rgba(255,255,255,.85);animation:orb3 13.5s linear infinite;}
-        @keyframes orb1{from{transform:rotate(0deg) translateX(175px) rotate(0deg);}to{transform:rotate(360deg) translateX(175px) rotate(-360deg);}}
-        @keyframes orb2{from{transform:rotate(120deg) translateX(135px) rotate(-120deg);}to{transform:rotate(480deg) translateX(135px) rotate(-480deg);}}
-        @keyframes orb3{from{transform:rotate(240deg) translateX(100px) rotate(-240deg);}to{transform:rotate(600deg) translateX(100px) rotate(-600deg);}}
-
-        .anat-ring{position:absolute;border-radius:50%;pointer-events:none;}
-        .ar-1{width:360px;height:360px;top:50%;left:52%;margin:-180px 0 0 -180px;z-index:7;border:1px dashed rgba(44,206,209,.22);animation:ringR 24s linear infinite;opacity:0;transition:opacity 1.5s ease 1.8s;}
-        .ar-1.on{opacity:1;}
-        .ar-2{width:455px;height:455px;top:50%;left:52%;margin:-227px 0 0 -227px;z-index:7;border:1px dashed rgba(255,138,91,.14);animation:ringR 34s linear infinite reverse;opacity:0;transition:opacity 1.5s ease 2s;}
-        .ar-2.on{opacity:1;}
-        @keyframes ringR{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-
-        .ring-tick{
-          position:absolute;width:6px;height:6px;border-radius:50%;
-          background:#2CCED1;box-shadow:0 0 6px rgba(44,206,209,.8);
-          top:50%;left:50%;transform-origin:0 0;
+        /* ════ BODY ════ */
+        .srk-body {
+          flex:1; display:grid; grid-template-columns:1fr 1fr; min-height:0;
+          position: relative;
         }
 
-        .kidney-sm{
-          position:absolute;width:130px;height:163px;left:54px;bottom:108px;
-          z-index:8;pointer-events:none;
-          opacity:0;transition:opacity 1.3s ease 1.5s;
-          animation:ksm 11s ease-in-out infinite 3s;
-          filter:drop-shadow(0 0 16px rgba(255,138,91,.45));
-          transform:rotate(12deg);
+        /* ════ LEFT PANEL — white ════ */
+        .srk-left {
+          display:flex; flex-direction:column; justify-content:center;
+          padding:60px 52px 52px 56px;
+          background:var(--panel);
+          border-right:1px solid rgba(44,206,209,0.10);
         }
-        .kidney-sm.on{opacity:.62;}
-        @keyframes ksm{0%,100%{transform:rotate(12deg) translateY(0);}50%{transform:rotate(7deg) translateY(-10px);}}
 
-        .kidney-xs{
-          position:absolute;width:78px;height:97px;left:198px;top:76px;
-          z-index:8;pointer-events:none;
-          opacity:0;transition:opacity 1.3s ease 1.7s;
-          animation:kxs 15s ease-in-out infinite 3.2s;
-          filter:drop-shadow(0 0 10px rgba(44,206,209,.4));
-          transform:rotate(-20deg);
+        .eyebrow {
+          display:inline-flex; align-items:center; gap:9px;
+          padding:6px 16px;
+          border:1px solid rgba(44,206,209,0.28); border-radius:100px;
+          background:rgba(44,206,209,0.07);
+          font-size:9.5px; font-weight:500; color:var(--teal);
+          letter-spacing:2.6px; text-transform:uppercase;
+          align-self:flex-start; margin-bottom:26px;
+          opacity:0; transform:translateY(14px);
+          transition:opacity .7s ease .28s, transform .7s ease .28s;
         }
-        .kidney-xs.on{opacity:.38;}
-        @keyframes kxs{0%,100%{transform:rotate(-20deg) scale(1) translateY(0);}50%{transform:rotate(-12deg) scale(1.05) translateY(-8px);}}
+        .eyebrow.on { opacity:1; transform:translateY(0); }
+        .ew-d { width:16px; height:1px; background:var(--teal); opacity:.5; }
 
-        .vessels{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity 1.8s ease 1.9s;}
-        .vessels.on{opacity:1;}
-
-        .vitals-strip{position:absolute;bottom:148px;right:378px;z-index:10;pointer-events:none;opacity:0;transition:opacity 1s ease 2.1s;}
-        .vitals-strip.on{opacity:1;}
-        .ecg-path{stroke-dasharray:340;stroke-dashoffset:340;transition:stroke-dashoffset 3.2s ease 2.3s;}
-        .ecg-path.draw{stroke-dashoffset:0;}
-        .vitals-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(44,206,209,.72);text-align:right;margin-top:4px;}
-
-        /* ── credential badge (replaces GFR) ── */
-        .gfr-badge{
-          position:absolute;right:56px;top:calc(50% + 134px);z-index:12;
-          background:rgba(255,255,255,.93);border:1px solid rgba(212,160,23,.3);border-left:3px solid #D4A017;
-          padding:11px 15px;backdrop-filter:blur(14px);
-          box-shadow:0 8px 28px rgba(212,160,23,.16);
-          opacity:0;transform:translateX(22px);transition:opacity .95s ease 2.25s,transform .95s ease 2.25s;
-        }
-        .gfr-badge.on{opacity:1;transform:translateX(0);}
-        .gb-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#D4A017;margin-bottom:3px;font-weight:500;}
-        .gb-val{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);line-height:1;font-weight:600;}
-        .gb-sub{font-size:9px;color:rgba(26,48,64,.5);margin-top:2px;}
-
-        .anat-lbl{
-          position:absolute;right:56px;top:calc(50% - 218px);z-index:12;
-          opacity:0;transform:translateX(18px);
-          transition:opacity .9s ease 2.4s,transform .9s ease 2.4s;
-          font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(44,206,209,.75);text-align:right;
-        }
-        .anat-lbl.on{opacity:1;transform:translateX(0);}
-        .anat-lbl::before{content:'';display:block;height:1px;width:36px;background:rgba(44,206,209,.42);margin-bottom:6px;margin-left:auto;}
-
-        /* ═══ NAVBAR ═══ */
-        .navbar{
-          position:relative;z-index:20;
-          display:flex;align-items:center;justify-content:space-between;
-          padding:22px 60px;
-          background:rgba(255,255,255,.9);
-          border-bottom:1px solid rgba(44,206,209,.12);
-          backdrop-filter:blur(20px);
-          opacity:0;transform:translateY(-26px);
-          transition:opacity .75s ease,transform .75s ease;
-        }
-        .navbar.on{opacity:1;transform:translateY(0);}
-        .logo-mark{display:flex;align-items:center;gap:12px;}
-        .logo-icon{
-          width:42px;height:42px;
-          background:linear-gradient(135deg,#2CCED1,#FF8A5B);
-          border-radius:10px;display:flex;align-items:center;justify-content:center;
-          font-size:19px;font-weight:700;color:#fff;
+        /* H1 */
+        .srk-h1 {
           font-family:'Cormorant Garamond',serif;
-          box-shadow:0 0 20px rgba(44,206,209,.38);
+          font-size:clamp(2.8rem, 3.5vw, 4.6rem);
+          font-weight:600; line-height:1.08; letter-spacing:-.01em; color:var(--ink);
         }
-        .logo-name{font-size:16px;font-weight:600;color:var(--dark);letter-spacing:.4px;}
-        .logo-sub{font-size:10px;color:rgba(26,48,64,.4);letter-spacing:2px;text-transform:uppercase;}
-        .nav-links{display:flex;gap:32px;}
-        .nav-links a{font-size:12px;font-weight:400;color:rgba(26,48,64,.5);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;}
-        .nav-links a:hover{color:#FF8A5B;}
-        .nav-badge{
-          display:flex;align-items:center;gap:8px;padding:9px 20px;
-          border:1px solid rgba(44,206,209,.3);border-radius:100px;
-          font-size:12px;font-weight:500;color:#2CCED1;
-          letter-spacing:1px;text-transform:uppercase;
-          background:rgba(44,206,209,.06);
-          transition:background .2s,border-color .2s;
-        }
-        .nav-badge:hover{background:rgba(44,206,209,.1);border-color:rgba(44,206,209,.5);}
-        .badge-dot{width:6px;height:6px;border-radius:50%;background:#2CCED1;box-shadow:0 0 6px #2CCED1;animation:dotP 2s ease-in-out infinite;}
-        @keyframes dotP{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(1.5);}}
+        .hl   { display:block; overflow:hidden; }
+        .hi   { display:block; animation:lUp .88s cubic-bezier(.22,.68,0,1.15) both; }
 
-        /* ═══ CONTENT ═══ */
-        .hero-content{
-          position:relative;z-index:15;flex:1;
-          display:flex;flex-direction:column;align-items:center;justify-content:center;
-          padding:36px 64px 36px;text-align:center;
+        .hl:nth-child(1) .hi { animation-delay:.34s; color:var(--ink); }
+        .hl:nth-child(2) .hi {
+          animation-delay:.48s;
+          background:linear-gradient(90deg,var(--teal) 0%,#7af6f8 50%,var(--teal) 100%);
+          background-size:220% auto;
+          -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+          animation:lUp .88s cubic-bezier(.22,.68,0,1.15) .48s both, shim 5s linear infinite 2s;
         }
-
-        /* eyebrow */
-        .eyebrow{
-          display:inline-flex;align-items:center;gap:12px;
-          padding:9px 22px;border:1px solid rgba(44,206,209,.3);border-radius:100px;
-          background:rgba(44,206,209,.07);font-size:11px;font-weight:500;
-          color:#2CCED1;letter-spacing:2.5px;text-transform:uppercase;
-          margin-bottom:32px;
-          opacity:0;transform:translateY(24px);
-          transition:opacity .85s ease .3s,transform .85s ease .3s;
+        .hl:nth-child(3) .hi {
+          animation-delay:.62s; color:transparent;
+          -webkit-text-stroke:1.2px rgba(255,138,91,0.7);
         }
-        .eyebrow.on{opacity:1;transform:translateY(0);}
-        .eyebrow-dash{width:22px;height:1.5px;background:#2CCED1;opacity:.6;}
-
-        /* ── H1 interactive words ── */
-        .hero-h1{
-          font-family:'Cormorant Garamond',serif;
-          font-size:clamp(3rem,5.8vw,5.25rem);
-          font-weight:600;line-height:1.18;
-          display:flex;flex-wrap:wrap;justify-content:center;gap:.2em;
-          white-space:nowrap;overflow:visible;margin-bottom:0;
+        .hl:nth-child(4) .hi {
+          animation-delay:.76s; font-style:italic;
+          background:linear-gradient(90deg,var(--orange) 0%,#ffc4a0 50%,var(--orange) 100%);
+          background-size:220% auto;
+          -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+          animation:lUp .88s cubic-bezier(.22,.68,0,1.15) .76s both, shim 4.5s linear infinite 2.2s;
         }
-
-        .h1-word{
-          display:inline-block;vertical-align:bottom;
-          cursor:default;
-        }
-        .h1-word-inner{
-          display:inline-block;
-          animation:wordUp .95s cubic-bezier(.22,.68,0,1.2) both;
-          transition:transform .3s cubic-bezier(.34,1.56,.64,1), letter-spacing .3s ease, filter .3s ease;
-          will-change:transform;
-        }
-        .h1-word:hover .h1-word-inner{
-          transform:translateY(-6px) scale(1.04);
-          letter-spacing:.03em;
-          filter:drop-shadow(0 4px 16px rgba(44,206,209,.35));
-        }
-
-        .h1-word:nth-child(1) .h1-word-inner{animation-delay:.42s;}
-        .h1-word:nth-child(2) .h1-word-inner{animation-delay:.56s;}
-        .h1-word:nth-child(3) .h1-word-inner{animation-delay:.70s;}
-        .h1-word:nth-child(4) .h1-word-inner{animation-delay:.84s;}
-        @keyframes wordUp{from{transform:translateY(110%) skewY(3deg);opacity:0;}to{transform:translateY(0) skewY(0deg);opacity:1;}}
-
-        .wc-dark{color:var(--dark);}
-        .wc-dark:hover .h1-word-inner{filter:drop-shadow(0 4px 16px rgba(44,206,209,.4));}
-
-        .wc-teal .h1-word-inner{
-          background:linear-gradient(90deg,#2CCED1,#1abfc2,#2CCED1);
-          background-size:200% auto;
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-          animation:wordUp .95s cubic-bezier(.22,.68,0,1.2) .56s both, shimT 4s linear infinite 1.5s;
-        }
-        .wc-teal:hover .h1-word-inner{
-          background:linear-gradient(90deg,#FF8A5B,#e05828,#FF8A5B);
-          background-size:200% auto;
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-          filter:drop-shadow(0 4px 20px rgba(255,138,91,.4));
-        }
-        @keyframes shimT{0%{background-position:0% center;}100%{background-position:200% center;}}
-
-        .wc-outline .h1-word-inner{
-          color:transparent;
-          -webkit-text-stroke:1.5px #FF8A5B;
-          text-stroke:1.5px #FF8A5B;
-          animation:wordUp .95s cubic-bezier(.22,.68,0,1.2) .70s both, strokeP 3.5s ease-in-out infinite 1.8s;
-        }
-        .wc-outline:hover .h1-word-inner{
-          -webkit-text-stroke-color:#2CCED1;
-          filter:drop-shadow(0 0 18px rgba(44,206,209,.45));
-        }
-        @keyframes strokeP{0%,100%{-webkit-text-stroke-color:rgba(255,138,91,.9);}50%{-webkit-text-stroke-color:rgba(255,138,91,.35);}}
-
-        .wc-orange .h1-word-inner{
-          background:linear-gradient(90deg,#FF8A5B,#e05828,#FF8A5B);
-          background-size:200% auto;
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-          font-style:italic;
-          animation:wordUp .95s cubic-bezier(.22,.68,0,1.2) .84s both, shimO 3.5s linear infinite 1.9s;
-        }
-        .wc-orange:hover .h1-word-inner{
-          background:linear-gradient(90deg,#2CCED1,#1abfc2,#2CCED1);
-          background-size:200% auto;
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-          font-style:italic;
-          filter:drop-shadow(0 4px 20px rgba(44,206,209,.4));
-        }
-        @keyframes shimO{0%{background-position:0% center;}100%{background-position:200% center;}}
+        @keyframes lUp { from{transform:translateY(110%) skewY(2deg);opacity:0;} to{transform:translateY(0) skewY(0);opacity:1;} }
+        @keyframes shim { from{background-position:0% center;} to{background-position:220% center;} }
 
         /* subtitle */
-        .hero-sub{
-          max-width:560px;font-size:16px;line-height:1.82;font-weight:300;
-          color:rgba(26,48,64,.6);margin:26px auto 0;
-          opacity:0;transform:translateY(20px);
-          transition:opacity .95s ease .92s,transform .95s ease .92s;
+        .srk-sub {
+          margin-top:22px; font-size:14px; line-height:1.88; font-weight:300;
+          color:var(--body); max-width:420px;
+          opacity:0; transform:translateY(12px);
+          transition:opacity .8s ease .88s, transform .8s ease .88s;
         }
-        .hero-sub.on{opacity:1;transform:translateY(0);}
-        .hero-sub strong{color:var(--dark);font-weight:500;}
+        .srk-sub.on { opacity:1; transform:translateY(0); }
+        .srk-sub strong { color:var(--ink); font-weight:500; }
 
-        /* credential pills under subtitle */
-        .cred-row{
-          display:flex;align-items:center;gap:8px;margin-top:14px;
-          flex-wrap:wrap;justify-content:center;
-          opacity:0;transition:opacity .95s ease 1.0s;
+        /* creds */
+        .srk-creds {
+          display:flex; flex-wrap:wrap; gap:7px; margin-top:16px;
+          opacity:0; transition:opacity .8s ease 1.0s;
         }
-        .cred-row.on{opacity:1;}
-        .cred-pill{
-          font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-          padding:4px 12px;border-radius:100px;
-        }
-        .cp-gold{background:rgba(212,160,23,.12);color:#b8860b;border:1px solid rgba(212,160,23,.3);}
-        .cp-teal{background:rgba(44,206,209,.1);color:#2CCED1;border:1px solid rgba(44,206,209,.28);}
-        .cp-ink{background:rgba(13,30,40,.06);color:rgba(13,30,40,.55);border:1px solid rgba(13,30,40,.1);}
+        .srk-creds.on { opacity:1; }
+        .cred { font-size:9px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; padding:3px 11px; border-radius:100px; }
+        .cg { background:rgba(212,160,23,.18); color:#e8c44a; border:1px solid rgba(212,160,23,.35); }
+        .ct { background:rgba(44,206,209,.15); color:var(--teal); border:1px solid rgba(44,206,209,.35); }
+        .cm { background:rgba(255,255,255,.08); color:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.15); }
 
-        /* CTA */
-        .cta-row{display:flex;align-items:center;gap:18px;margin-top:36px;opacity:0;transform:translateY(20px);transition:opacity .95s ease 1.05s,transform .95s ease 1.05s;}
-        .cta-row.on{opacity:1;transform:translateY(0);}
-
-        .btn-primary{
-          position:relative;overflow:hidden;padding:15px 34px;
-          background:linear-gradient(135deg,#2CCED1 0%,#1aa8ab 100%);
-          border:none;border-radius:8px;
-          font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.5px;
-          color:#fff;cursor:pointer;
-          box-shadow:0 6px 28px rgba(44,206,209,.4),0 2px 8px rgba(0,0,0,.08);
-          transition:transform .2s,box-shadow .2s;
+        /* CTAs */
+        .srk-cta {
+          display:flex; align-items:center; gap:12px; margin-top:30px;
+          opacity:0; transform:translateY(12px);
+          transition:opacity .8s ease 1.08s, transform .8s ease 1.08s;
         }
-        .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#FF8A5B,#e06030);opacity:0;transition:opacity .3s;}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 38px rgba(44,206,209,.52);}
-        .btn-primary:hover::after{opacity:1;}
-        .btn-primary span{position:relative;z-index:1;}
+        .srk-cta.on { opacity:1; transform:translateY(0); }
 
-        .btn-ghost{
-          display:flex;align-items:center;gap:10px;padding:14px 26px;
-          background:transparent;border:1px solid rgba(44,206,209,.3);border-radius:8px;
-          font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;
-          color:rgba(26,48,64,.65);cursor:pointer;
-          transition:border-color .2s,color .2s,background .2s;
+        .btn-b {
+          position:relative; overflow:hidden; padding:12px 28px;
+          background:linear-gradient(135deg,var(--teal),#1aa8ab);
+          border:none; border-radius:8px;
+          font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+          letter-spacing:.5px; color:#fff; cursor:pointer; text-decoration:none;
+          display:inline-block;
+          box-shadow:0 4px 22px rgba(44,206,209,.28);
+          transition:transform .2s, box-shadow .2s;
         }
-        .btn-ghost:hover{border-color:#FF8A5B;color:#FF8A5B;background:rgba(255,138,91,.05);}
-        .btn-ghost svg{transition:transform .2s;}
-        .btn-ghost:hover svg{transform:translateX(4px);}
+        .btn-b::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--orange),#c04010); opacity:0; transition:opacity .3s; }
+        .btn-b:hover  { transform:translateY(-2px); box-shadow:0 10px 32px rgba(44,206,209,.42); }
+        .btn-b:hover::after { opacity:1; }
+        .btn-b span   { position:relative; z-index:1; }
+
+        .btn-s {
+          display:inline-flex; align-items:center; gap:8px; padding:11px 20px;
+          background:transparent;
+          border:1px solid rgba(255,255,255,.2); border-radius:8px;
+          font-family:'DM Sans',sans-serif; font-size:12px; font-weight:400;
+          color:rgba(255,255,255,.7); cursor:pointer; text-decoration:none;
+          transition:border-color .2s, color .2s, background .2s;
+        }
+        .btn-s:hover { border-color:var(--orange); color:var(--orange); background:rgba(255,138,91,.08); }
+        .btn-s svg   { transition:transform .2s; }
+        .btn-s:hover svg { transform:translateX(3px); }
 
         /* divider */
-        .divider-row{display:flex;align-items:center;gap:16px;margin-top:44px;width:100%;max-width:680px;opacity:0;transition:opacity .95s ease 1.22s;}
-        .divider-row.on{opacity:1;}
-        .divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(44,206,209,.22),transparent);}
-        .divider-text{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,48,64,.28);white-space:nowrap;}
+        .srk-div {
+          display:flex; align-items:center; gap:12px; margin-top:36px;
+          opacity:0; transition:opacity .8s ease 1.22s;
+        }
+        .srk-div.on { opacity:1; }
+        .dline { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(44,206,209,.20),transparent); }
+        .dlabel { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
 
-        /* stats */
-        .stats-row{
-          display:flex;gap:0;margin-top:28px;width:100%;max-width:720px;
-          border:1px solid rgba(44,206,209,.14);border-radius:16px;overflow:hidden;
-          background:rgba(255,255,255,.82);backdrop-filter:blur(16px);
-          box-shadow:0 4px 32px rgba(44,206,209,.08);
-          opacity:0;transform:translateY(18px);
-          transition:opacity .95s ease 1.36s,transform .95s ease 1.36s;
+        /* stats 2×2 */
+        .srk-stats {
+          display:grid; grid-template-columns:1fr 1fr; gap:0;
+          margin-top:20px;
+          border:1px solid rgba(44,206,209,.14); border-radius:12px;
+          overflow:hidden; background:rgba(13,21,32,0.5);
+          box-shadow:0 2px 20px rgba(0,0,0,.3);
+          opacity:0; transform:translateY(10px);
+          transition:opacity .8s ease 1.36s, transform .8s ease 1.36s;
         }
-        .stats-row.on{opacity:1;transform:translateY(0);}
-        .stat-card{
-          flex:1;padding:22px 14px;border-right:1px solid rgba(44,206,209,.1);
-          text-align:center;position:relative;
-          animation:fSlideUp .75s ease both;
-          transition:background .25s;
-        }
-        .stat-card:hover{background:rgba(44,206,209,.04);}
-        .stat-card:last-child{border-right:none;}
-        @keyframes fSlideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-        .stat-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40%;height:2px;background:linear-gradient(90deg,transparent,#FF8A5B,transparent);}
-        .stat-value{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;background:linear-gradient(135deg,#2CCED1,#FF8A5B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-        .stat-suffix{font-size:1.6rem;}
-        .stat-label{font-size:9.5px;font-weight:400;letter-spacing:1.4px;text-transform:uppercase;color:rgba(26,48,64,.38);margin-top:6px;}
+        .srk-stats.on { opacity:1; transform:translateY(0); }
 
-        /* bottom bar */
-        .bottom-bar{
-          position:relative;z-index:15;
-          display:flex;align-items:center;justify-content:space-between;
-          padding:18px 60px;border-top:1px solid rgba(44,206,209,.09);
-          background:rgba(255,255,255,.75);backdrop-filter:blur(10px);
-          opacity:0;transition:opacity .9s ease 1.7s;
+        .stat { padding:18px 14px; text-align:center; position:relative; transition:background .22s; }
+        .stat:hover { background:rgba(44,206,209,.08); }
+        .stat:nth-child(1),.stat:nth-child(2) { border-bottom:1px solid rgba(44,206,209,.12); }
+        .stat:nth-child(1),.stat:nth-child(3) { border-right:1px solid rgba(44,206,209,.12); }
+        .stat::before {
+          content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+          width:46%; height:1.5px;
+          background:linear-gradient(90deg,transparent,var(--orange),transparent);
         }
-        .bottom-bar.on{opacity:1;}
-        .bottom-text{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(26,48,64,.24);}
-        .scroll-hint{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,48,64,.27);}
-        .scroll-arrow{width:28px;height:28px;border-radius:50%;border:1px solid rgba(44,206,209,.24);display:flex;align-items:center;justify-content:center;animation:sBounce 2s ease-in-out infinite;}
-        @keyframes sBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+        .sn {
+          font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:600; line-height:1;
+          background:linear-gradient(135deg,var(--teal),var(--orange));
+          -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .sx { font-size:1.25rem; }
+        .sl { font-size:8.5px; font-weight:400; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-top:4px; }
 
-        /* responsive */
-        @media(max-width:1100px){
-          .kidney-fg-wrap,.kidney-halo,.kidney-sm,.kidney-xs,.vitals-strip,.gfr-badge,.anat-lbl,.ar-1,.ar-2,.vessels{display:none;}
-          .hero-h1{white-space:normal;font-size:clamp(2rem,7vw,3.6rem);}
-          .navbar,.bottom-bar,.hero-content{padding-left:32px;padding-right:32px;}
-          .nav-links{display:none;}
+        /* ════ RIGHT PANEL — dark canvas ════ */
+        .srk-right {
+          position:relative; 
+          overflow:hidden;
+          // background:var(--canvas);
+          border-left:none;
+          height: 100%;
+          width: 100%;
         }
-        @media(max-width:600px){
-          .stats-row{flex-direction:column;}
-          .stat-card{border-right:none;border-bottom:1px solid rgba(44,206,209,.1);}
-          .stat-card:last-child{border-bottom:none;}
-          .cta-row{flex-direction:column;width:100%;}
-          .btn-primary,.btn-ghost{width:100%;justify-content:center;}
-          .hero-h1{white-space:normal;}
+
+        /* Legend inside canvas panel */
+        .srk-legend {
+          position:absolute; bottom:26px; left:22px; z-index:10;
+          display:flex; flex-direction:column; gap:8px;
+          opacity:0; transform:translateY(10px);
+          transition:opacity .9s ease 2.4s, transform .9s ease 2.4s;
+        }
+        .srk-legend.on { opacity:1; transform:translateY(0); }
+        .leg { display:flex; align-items:center; gap:8px; font-size:8.5px; letter-spacing:.18em; text-transform:uppercase; color:rgba(244,244,244,.35); }
+        .ld  { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+        .ld-a { background:#dd1111; box-shadow:0 0 5px #dd1111; }
+        .ld-v { background:#2244cc; box-shadow:0 0 5px #2244cc; }
+        .ld-u { background:#c8a820; box-shadow:0 0 5px #c8a820; }
+        .ld-s { background:#d0b85c; box-shadow:0 0 5px #d0b85c; }
+        .ld-g { background:var(--teal); box-shadow:0 0 5px var(--teal); }
+
+        /* Live indicator */
+        .srk-live {
+          position:absolute; top:20px; right:20px; z-index:10;
+          display:flex; align-items:center; gap:6px;
+          font-size:8.5px; letter-spacing:.2em; text-transform:uppercase;
+          color:rgba(44,206,209,.6);
+          opacity:0; transition:opacity .9s ease 2.5s;
+        }
+        .srk-live.on { opacity:1; }
+        .live-dot { width:6px; height:6px; border-radius:50%; background:var(--teal); box-shadow:0 0 7px var(--teal); animation:liveP 1.1s ease-in-out infinite; }
+        @keyframes liveP { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+
+        /* ════ FOOTER ════ */
+        .srk-foot {
+          height:46px; display:flex; align-items:center; justify-content:space-between;
+          padding:0 56px; flex-shrink:0;
+          background:rgba(13,21,32,0.8);
+          border-top:1px solid rgba(44,206,209,.15);
+          box-shadow:0 -1px 18px rgba(0,0,0,.3);
+          opacity:0; transition:opacity .8s ease 1.8s;
+        }
+        .srk-foot.on { opacity:1; }
+        .foot-l { font-size:9.5px; letter-spacing:1.6px; text-transform:uppercase; color:rgba(255,255,255,.4); }
+        .scroll-h { display:flex; align-items:center; gap:8px; font-size:9.5px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.4); }
+        .scroll-i {
+          width:26px; height:26px; border-radius:50%;
+          border:1px solid rgba(44,206,209,.3);
+          display:flex; align-items:center; justify-content:center;
+          animation:sBounce 2s ease-in-out infinite;
+        }
+        @keyframes sBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
+
+        /* ════ RESPONSIVE ════ */
+        @media (max-width:1080px) {
+          .srk-body { grid-template-columns:1fr; }
+          .srk-right { display:none; }
+          .srk-left  { padding:44px 28px; border-right:none; }
+          .srk-nav   { padding:0 28px; }
+          .nav-links { display:none; }
+          .srk-foot  { padding:0 28px; }
+          .srk-h1    { font-size:clamp(2.4rem,8vw,4rem); }
+        }
+        @media (max-width:600px) {
+          .srk-stats { grid-template-columns:1fr 1fr; }
+          .srk-cta   { flex-direction:column; }
+          .btn-b,.btn-s { width:100%; justify-content:center; text-align:center; }
         }
       `}</style>
 
-      <section className="hero-root">
-        <div className="grid-lines" />
-        <div className="blob-orange" />
+      <section className="srk">
 
-        {/* particles */}
-        {particles.map((p, i) => (
-          <div key={i} className="particle" style={p as React.CSSProperties} />
-        ))}
+        {/* NAVBAR */}
+    
 
-        {/* ── BG kidneys ── */}
-        <KidneySVG uid="bg1" className={"kidney-bg-1 " + on} />
-        <KidneySVG uid="bg2" className={"kidney-bg-2 " + on} />
-        <KidneySVG uid="bg3" className={"kidney-bg-3 " + on} />
+        {/* BODY */}
+        <div className="srk-body">
 
-        {/* ── vessels ── */}
-        <svg className={"vessels " + on} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <linearGradient id="vg1" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="rgba(44,206,209,0)" />
-              <stop offset="50%" stopColor="rgba(44,206,209,0.3)" />
-              <stop offset="100%" stopColor="rgba(44,206,209,0)" />
-            </linearGradient>
-            <linearGradient id="vg2" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="rgba(255,138,91,0)" />
-              <stop offset="50%" stopColor="rgba(255,138,91,0.26)" />
-              <stop offset="100%" stopColor="rgba(255,138,91,0)" />
-            </linearGradient>
-          </defs>
-          <path d="M700 -10 C700 120 880 270 1102 352 C1182 378 1272 386 1328 392"
-            stroke="url(#vg1)" strokeWidth="1.8" fill="none" strokeDasharray="7 5" opacity="0.52" />
-          <path d="M700 -10 C700 180 822 372 1064 444 C1134 464 1226 468 1286 470"
-            stroke="url(#vg1)" strokeWidth="1.2" fill="none" strokeDasharray="4 8" opacity="0.28" />
-          <path d="M1084 352 C1064 402 1076 452 1086 502"
-            stroke="url(#vg2)" strokeWidth="1.2" fill="none" opacity="0.4" />
-          <path d="M1124 372 C1114 412 1119 462 1124 512"
-            stroke="url(#vg2)" strokeWidth="1" fill="none" opacity="0.28" />
-        </svg>
+          {/* ── LEFT ── */}
+          <div className="srk-left">
 
-        {/* ── anatomy rings ── */}
-        <div className={"anat-ring ar-1 " + on} />
-        <div className={"anat-ring ar-2 " + on} />
+            <div className={`eyebrow ${o}`}>
+              <div className="ew-d"/>Senior Urologist · Jaipur<div className="ew-d"/>
+            </div>
 
-        {/* ── ECG vitals ── */}
-        <div className={"vitals-strip " + on}>
-          <svg viewBox="0 0 300 38" width="300" height="38">
-            <path
-              className={"ecg-path " + (mounted ? "draw" : "")}
-              d="M0 19 L28 19 L34 6 L40 32 L46 4 L52 19 L78 19 L84 10 L90 28 L96 10 L102 19 L128 19 L134 6 L140 32 L146 4 L152 19 L178 19 L184 11 L190 27 L196 11 L202 19 L240 19 L248 7 L256 31 L262 19 L300 19"
-              stroke="rgba(44,206,209,0.72)" strokeWidth="1.5" fill="none" strokeLinecap="round"
-            />
-          </svg>
-          {/* ── updated vitals label ── */}
-          <div className="vitals-lbl">Urology · SRK Hospital Jaipur</div>
+            <h1 className="srk-h1">
+              <span className="hl"><span className="hi">Precision</span></span>
+              <span className="hl"><span className="hi">Urology &amp;</span></span>
+              <span className="hl"><span className="hi">Compassionate</span></span>
+              <span className="hl"><span className="hi">Healing.</span></span>
+            </h1>
+
+            <p className={`srk-sub ${o}`}>
+              <strong>Dr. Rakesh Sharma</strong> — Gold Medallist M.Ch. Urologist and Director of{" "}
+              <strong>SRK Hospital, Jaipur</strong> — 25+ years of precision urology: kidney stone
+              removal, renal transplantation, prostate surgery &amp; advanced endo-urological care.
+            </p>
+
+            <div className={`srk-creds ${o}`}>
+              <span className="cred cg">🥇 Gold Medallist · M.Ch.</span>
+              <span className="cred ct">MBBS · M.S. · DNB</span>
+              <span className="cred cm">Director, SRK Hospital</span>
+            </div>
+
+            <div className={`srk-cta ${o}`}>
+              <a href="tel:+919773332601" className="btn-b"><span>Book Appointment</span></a>
+              <a href="/medical-services" className="btn-s">
+                Services
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+            </div>
+
+          
+          </div>
+
+          {/* ── RIGHT: Three.js ── */}
+          <div className="srk-right">
+            <KidneyScene />
+
+            <div className={`srk-legend ${o}`}>
+              {([["ld-a","Renal Artery"],["ld-v","Renal Vein"],["ld-u","Ureter"],["ld-s","Renal Calculi"],["ld-g","Vascular Graft"]] as [string,string][]).map(([d,l])=>(
+                <div key={d} className="leg"><div className={`ld ${d}`}/>{l}</div>
+              ))}
+            </div>
+
+            {/* <div className={`srk-live ${o}`}>
+              <div className="live-dot"/>72 BPM · Live
+            </div> */}
+          </div>
+
         </div>
 
-        {/* ── anatomy label — updated ── */}
-        <div className={"anat-lbl " + on}>Renal Transplant</div>
-
-        {/* ── credential badge (replaces GFR) ── */}
-        <div className={"gfr-badge " + on}>
-          <div className="gb-lbl">Gold Medallist</div>
-          <div className="gb-val">M.Ch.</div>
-          <div className="gb-sub">Urology · Kolkata</div>
-        </div>
-
-        {/* ── halo glow behind kidney ── */}
-        <div
-          className={"kidney-fg-wrap " + on}
-          style={{
-            transform: `translateY(-50%) translate(${px * 0.3}px, ${py * 0.3}px)`,
-            right: 52,
-          }}
-        >
-          <div className={"kidney-halo " + on} />
-          <div className="orbit-wrap">
-            <div className="od od-1" /><div className="od od-2" /><div className="od od-3" />
-          </div>
-          <div className="pulse-rings">
-            <div className="pr pr-1" /><div className="pr pr-2" /><div className="pr pr-3" />
-          </div>
-          <div className="kidney-scan" />
-          <KidneySVG uid="fg1" className={"kidney-fg " + on} />
-        </div>
-
-        {/* ── small accent kidneys ── */}
-        <KidneySVG uid="sm1" className={"kidney-sm " + on} />
-        <KidneySVG uid="xs1" className={"kidney-xs " + on} />
-
-        {/* ══ NAVBAR (kept commented as original) ══ */}
-        {/* <nav className={"navbar " + on}>...</nav> */}
-
-        {/* ══ MAIN CONTENT ══ */}
-        <main className="hero-content">
-
-          {/* ── updated eyebrow ── */}
-          <div className={"eyebrow " + on}>
-            <div className="eyebrow-dash" />
-            Senior Urologist · Jaipur, Rajasthan
-            <div className="eyebrow-dash" />
-          </div>
-
-          {/* ── updated H1: Kidney Care, / World-Class / Surgery & / Transplant. ── */}
-          <h1 className="hero-h1">
-            {[
-              { text: "Precision",  cls: "wc-dark"    },
-              { text: "Urology &",   cls: "wc-teal"    },
-              { text: "Compassionate",     cls: "wc-outline" },
-              { text: "Healing.",   cls: "wc-orange"  },
-            ].map((w, i) => (
-              <span
-                key={i}
-                className={"h1-word " + w.cls}
-                onMouseEnter={() => setHoveredWord(i)}
-                onMouseLeave={() => setHoveredWord(null)}
-              >
-                <span className="h1-word-inner">{w.text}</span>
-              </span>
-            ))}
-          </h1>
-
-          {/* ── updated subtitle ── */}
-          <p className={"hero-sub " + on}>
-            <strong>Dr. Rakesh Sharma</strong> — Gold Medallist M.Ch. Urologist and Director of{" "}
-            <strong>SRK Hospital, Jaipur</strong> — delivers 25+ years of precision urology: kidney stone
-            removal, renal transplantation, prostate surgery, and complex endo-urological procedures with
-            unmatched surgical expertise and genuine compassion.
-          </p>
-
-          {/* ── NEW: credential pills ── */}
-          <div className={"cred-row " + on}>
-            <span className="cred-pill cp-gold">🥇 Gold Medallist · M.Ch. Urology</span>
-            <span className="cred-pill cp-teal">MBBS · M.S. · DNB</span>
-            <span className="cred-pill cp-ink">Director, SRK Hospital</span>
-          </div>
-
-          {/* ── updated CTA buttons ── */}
-          <div className={"cta-row " + on}>
-            <a href="tel:+919887711224"  className="btn-primary"><span>Book Appointment</span></a>
-            <a href ="/medical-services" className="btn-ghost">
-              View Services
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
-          </div>
-
-          {/* ── updated divider text ── */}
-          <div className={"divider-row " + on}>
-            <div className="divider-line" />
-            <div className="divider-text">200000+ patients · 689+ advanced procedures</div>
-            <div className="divider-line" />
-          </div>
-
-          {/* ── updated stats: real Dr Sharma numbers ── */}
-          <div ref={statsRef} className={"stats-row " + on}>
-            <StatCard value={25}   suffix="+"  label="Years of Experience"    delay={0}   started={statsStarted} />
-            <StatCard value={689}  suffix="+"  label="Advanced Procedures"    delay={150} started={statsStarted} />
-            <StatCard value={200000} suffix="+"  label="Happy Patients"         delay={300} started={statsStarted} />
-            <StatCard value={50000}  suffix="+"  label="Compact Surgeries"      delay={450} started={statsStarted} />
-          </div>
-        </main>
-
-        {/* ══ BOTTOM BAR — updated ══ */}
-        <div className={"bottom-bar " + on}>
-          <div className="bottom-text">SRK Hospital · Urology &amp; Renal Transplant · Jaipur, Rajasthan</div>
-          <div className="scroll-hint">
+        {/* FOOTER */}
+        <footer className={`srk-foot ${o}`}>
+          <div className="foot-l">SRK Hospital · Urology &amp; Renal Transplant · Jaipur</div>
+          <div className="scroll-h">
             Scroll to explore
-            <div className="scroll-arrow">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(26,48,64,0.4)" strokeWidth="2">
-                <path d="M12 5v14M5 12l7 7 7-7" strokeLinecap="round" />
+            <div className="scroll-i">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2">
+                <path d="M12 5v14M5 12l7 7 7-7" strokeLinecap="round"/>
               </svg>
             </div>
           </div>
-        </div>
+        </footer>
+
       </section>
     </>
   );

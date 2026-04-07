@@ -775,7 +775,7 @@ export default function BlogDetailPage() {
                     </div>
                   ))}
                 </div>
-                 <a href="tel:+919887711224" className="bd-book-btn">
+                 <a href="tel:+919773332601" className="bd-book-btn">
                   <span>Book Consultation</span>
                 </a>
               </div>
@@ -842,7 +842,7 @@ export default function BlogDetailPage() {
             <p className="bd-cta-sub">Dr. Rakesh Sharma is accepting new consultations at SRK Hospital, Jaipur.</p>
           </div>
           <div className="bd-cta-actions">
-            <a href="tel:+919887711224" className="bd-cta-btn-primary">
+            <a href="tel:+919773332601" className="bd-cta-btn-primary">
               <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "rgba(255,255,255,.7)", animation: "bdDotPulse 2s ease-in-out infinite" }} />
               Book a Consultation
             </a>
